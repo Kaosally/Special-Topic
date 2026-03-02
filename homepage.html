@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/homepage2.css">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <nav class = "navbar">
+            <ul class = "nav-links">
+                <!-- 表示「無序清單，用來包住主選單項目。 -->
+                <li><a href = "#" class = "active">首頁</a></li>
+                <!-- 列表項目 -->
+                <li><a href = "#">寵物友善空間</a>
+                <ul class = "has-submenu">
+                    <li><a href = "#">空間總覽</a></li>
+                    <li><a href = "#">地圖搜尋</a></li>
+                    <li><a href = "#">空間規範說明</a></li>
+                </ul>
+                </li>
+                <li><a href = "#">中途之家</a>
+                <ul class = "has-submenu">
+                    <li><a href = "#">中途之家總覽</a></li>
+                    <li><a href = "#">可互動時段說明</a></li>
+                    <li><a href = "#">空間規範說明</a></li>
+                </ul>
+                </li>
+                <li><a href = "#">預約互動</a>
+                <ul class = "has-submenu">
+                    <li><a href = "#">我要預約</a></li>
+                    <li><a href = "#">預約流程說明</a></li>
+                </ul>
+                </li>
+                <li><a href = "#">會員中心</a>
+                <ul class = "has-submenu">
+                    <li><a href = "#">我的預約</a></li>
+                    <li><a href = "#">我的評論</a></li>
+                    <li><a href = "#">個人資料</a></li>
+                    <li><a href = "#">登出</a></li>
+                </ul>
+                </li>
+            </ul>
+
+            <div class = "hamburger">
+                <span></span><span></span><span></span>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <svg width="100vw" height="100vh" viewBox="0 0 1200 400">
+
+            <!--在 SVG 裡，<defs> 是 “definitions”（定義）的縮寫。它的意思就是：先定義一些東西，但不直接顯示在畫布上，等你需要的時候再拿出來用。-->
+            <defs>
+                <filter id = "puffy">
+                    <!-- 生成一個 隨機凹凸的圖案（像皺巴巴的紙、波浪紋理）。 -->
+                    <!-- fractalNoise = 用柔和連續的皺紋紙、baseFrequency="0.09"
+皺紋的密度：不太細也不太粗-->
+                    <feTurbulence type = "fractalNoise" baseFrequency = "0.09" numOctaves = "4" result = "noise"/>
+                    <!-- <feDisplacementMap> 會把這個凹凸圖案套到圓形上，讓原本光滑的圓形 某些地方凸起，某些地方凹下。 -->
+                    <!-- 控制扭曲的強度，也就是偏移的幅度 單位是像素或 SVG 單位 數字越大 → 圖形被拉扯得越明顯、數字越小 → 變形很輕微，這裡 15 → 圖形有明顯的凸起和凹下，形成蓬鬆效果 -->
+                    <feDisplacementMap in = "SourceGraphic" in2 = "noise" scale = "15"/>
+                </filter>
+
+                <mask id="maskGrayLeft">
+                    <!-- → 白色 = 允許底下圖層被看到 -->
+                    <rect x="0" y="0" width="1200px" height="400px" fill="white">
+                        <!-- 當動畫跑到第 3 秒時，灰色填色的 path 開始「被遮罩放行」，
+                        當跑到第 4 秒時，粉色填色的 path 開始「被另一個遮罩放行」。
+                        fill="freeze" → 動畫結束後，保持動畫最後的狀態不變
+                        -->
+                        <animate attributeName="y" from="-400" to="0" dur="1s" fill="freeze" begin="3s">
+                        </animate>
+                    </rect>
+                </mask>
+
+                <mask id="maskPinkLeft">
+                    <rect x="0" y="0" width="1200" height="400" fill="white">
+                        <animate attributeName="y" from="-400" to="0" dur="1s" fill="freeze" begin="4s" />
+                    </rect>
+                </mask>
+
+                <mask id="maskGrayRight">
+                    <rect x="0" y="0" width="1200" height="400" fill="white">
+                        <animate attributeName="y" from="-400" to="0" dur="1s" fill="freeze" begin="3s" />
+                    </rect>
+                </mask>
+
+                <mask id="maskPinkRight">
+                    <rect x="0" y="0" width="1200" height="400" fill="white">
+                        <animate attributeName="y" from="-400" to="0" dur="1s" fill="freeze" begin="4s" />
+                    </rect>
+                </mask>
+
+                <!-- 因為 SVG 的 <animate> 有一個鐵則：<animate> 一定要掛在「被改變的元素」裡面。 -->
+                <g id = "single-petal">
+                    <path d = "M50 50 C35 45, 30 30, 35 15 L50 25 L65 15 C70 30 65 45 50 50 Z" />
+                    <path d = "M48 44 L46 36" stroke-width="0.8" stroke="#ff88bb"/>
+                    <path d = "M50 43 L50 35" stroke-width="0.8" stroke="#ff88bb"/>
+                    <path d = "M52 44 L54 36" stroke-width="0.8" stroke="#ff88bb"/>
+                </g>
+                <g id="sakura" fill="#ffeef5" stroke="#ff88bb" stroke-width="1">
+                    <g transform="translate(-50, -50)">
+                        <use href="#single-petal" transform="rotate(0, 50, 50)" />
+                        <use href="#single-petal" transform="rotate(72, 50, 50)" />
+                        <use href="#single-petal" transform="rotate(144, 50, 50)" />
+                        <use href="#single-petal" transform="rotate(216, 50, 50)" />
+                        <use href="#single-petal" transform="rotate(288, 50, 50)" />
+                    </g>
+                </g>
+
+                <g id = "MapleLeaves" fill = "orange" stroke = "#ee6655" stroke-width = "1" transform = "scale(1.2)">
+                    <path d="M50 5 L55 25 L75 30 L60 45 L70 65 L50 55 L30 65 L40 45 L25 30 L45 25 Z"/>
+
+                </g>
+                
+            </defs>
+            <g id = "background" transform="translate(0, 0)">
+                
+                <g id="grass">
+                    <!-- T 會自動延續上一個 Q 的曲線方向。這裡的終點 (1200, 240)，所以再畫一個平滑的波形到畫布右邊。 -->
+                    <path class="float-slow" d="M-10 260 Q300 230, 850 270 T1200 240 L1200 400 L0 400 Z" fill="#759172" filter="url(#puffy)" />
+                    <path class="float-medium"d="M-10 280 Q350 250, 700 290 T1200 270 L1200 400 L0 400 Z" fill="#1B4D1B" filter="url(#puffy)" />
+                </g>
+                <g id = "stone">
+                    <g transform="translate(150, 350) rotate(-5)">
+                        <ellipse cx="2" cy="2" rx="35" ry="12" fill="#333" opacity="0.3" />
+                        <ellipse cx="0" cy="0" rx="32" ry="11" fill="#888888" filter="url(#puffy)" />
+                        <ellipse cx="5" cy="-2" rx="12" ry="4" fill="#BBBBBB" opacity="0.4" />
+                    </g>
+
+                    <g transform = "translate(300,320)">
+                        <ellipse cx = "5" cy = "5" rx = "30" ry = "10" fill = "#333" opacity = "0.3" />
+                        <ellipse cx = "0" cy = "0" rx = "27" ry = "9" fill = "#8E8E8E" filter="url(#puffy)" />
+                        <ellipse cx = "-5" cy = "-2" rx = "10" ry = "3" fill = "#A6A6A6" filter="url(#puffy)"/>
+                    </g>
+
+                    <g transform = "translate(550,320) rotate(15)">
+                        <ellipse cx = "5" cy = "5" rx = "30" ry = "10" fill = "#333" opacity = "0.3" />
+                        <ellipse cx = "0" cy = "0" rx = "27" ry = "9" fill = "#8E8E8E" filter="url(#puffy)" />
+                        <ellipse cx = "-5" cy = "-2" rx = "10" ry = "3" fill = "#A6A6A6" filter="url(#puffy)"/>
+                    </g>
+
+                    <g transform = "translate(850,310) scale(1.2)">
+                        <ellipse cx = "2" cy = "2" rx = "25" ry = "8" fill = "#333" opacity = "0.3" />
+                        <ellipse cx = "0" cy = "0" rx = "18" ry = "7" fill = "#7A7A7A" filter="url(#puffy)" />
+                        <ellipse cx = "-5" cy = "-2" rx = "10" ry = "2" fill = "#A6A6A6" filter="url(#puffy)"/>
+                    </g>
+
+                    <g transform="translate(1050, 340) rotate(10)">
+                        <ellipse cx="2" cy="2" rx="28" ry="9" fill="#333" opacity="0.3" />
+                        <ellipse cx="0" cy="0" rx="23" ry="8" fill="#999999" filter="url(#puffy)" />
+                        <ellipse cx="-4" cy="-3" rx="8" ry="2" fill="#FFFFFF" opacity="0.2" />
+                    </g>
+                </g>
+
+                <g class = "park-pond" transform = "translate(1050,260)">
+                    <ellipse cx = "0" cy = "0" rx = "260" ry = "55" fill = "#759172" filter = "url(#puffy)" id = "float-slow" />
+                    <ellipse class="pond-water" cx = "0" cy = "0" rx = "240" ry = "35" fill = "#BEE2E2"/>  
+                    <g class="water-reflections" stroke="white" stroke-width="2" fill="none" opacity="0.6">
+                        <path d="M-150 -15 Q0 -25, 150 -15" />
+                        <path d="M-120 5 Q-60 15, 0 5" />
+                        <path d="M20 10 Q80 0, 140 10" />
+                        <path d="M-60 22 Q0 28, 60 22" />
+                    </g>
+                </g>
+            </g>
+            <g id="body" transform="translate(100,193)" scale="0.2"> 
+                <path id="bodyLine" 
+                    d="M-35 -20 L-45 0 L-40 5 L-40 8 L-45 11 L-40 15 L-35 20 L-30 25 L-25 30 L-20 45 L-10 45 L35 45 L35 35 L45 35 L65 25 L85 15 L85 3 L85 -10 L75 -20 L65 -30 L55 -40 L62 -46 L72 -50 L82 -56 
+                        L 40 -50 L 0 -45 L -35 -20 Z" 
+                    fill="none" stroke="#e3e3e3" stroke-width="2" filter="url(#puffy)" />
+
+                <path id="tailLine" 
+                    d="M32 -56 Q 115 -75, 120 -40 Q 125 -10, 82 -15 Z" 
+                    fill="none" stroke="#e3e3e3" stroke-width="2" filter="url(#puffy)" />
+                <path id="forefoot" d="M-15 45 L-18 50 Q-18 75, -10 75 L0 65 Q8 65, 5 55 L5 45" fill="none" stroke="#e3e3e3" stroke-width="2" filter="url(#puffy)" />
+                <path id="forefoot2" d="M20 45 Q22 75, 30 75 L40 65 Q48 65, 45 55 L45 35" fill="none" stroke="#e3e3e3" stroke-width="2" filter="url(#puffy)" />
+                <path id="hindfoot" d="M60 25 Q62 65, 70 65 L80 55 Q88 55, 85 45 L85 25" fill="none" stroke="#e3e3e3" stroke-width="2" filter="url(#puffy)" />
+            </g>
+
+            <!-- 遮罩是一塊白色的布，它從上面滑下來，滑到哪裡，填色就顯示到哪裡。 -->
+            <g transform = "translate(30, 60) scale(0.5) rotate(-35, 50, 10)" filter="url(#puffy)">
+                <path id="leftLineL" d="M50 10 L 10 80" stroke="#BEBEBE" stroke-width="2" fill="none" />
+                <path id="rightLineL" d="M50 10 L90 80" stroke="#BEBEBE" stroke-width="2" fill="none" />
+                <path id="bottomLineL" d="M10 80 L90 80" stroke="#BEBEBE" stroke-width="2" fill="none" />
+                <path d="M50 10 L10 80 L90 80 Z" fill="transparent" mask="url(#maskGrayLeft)" id="fillGrayL" />
+                <path d="M50 30 L25 70 L75 70 Z" fill="transparent" mask="url(#maskPinkLeft)" id="fillPinkL" />
+            </g>
+            
+            <g transform="translate(80, 30) scale(0.5) rotate(35, 50, 10)" filter="url(#puffy)">
+                <path id="leftLineR" d="M150 10 L110 80" stroke="#BEBEBE" stroke-width="2" fill="none" />
+                <path id="rightLineR" d="M150 10 L190 80" stroke="#BEBEBE" stroke-width="2" fill="none" />
+                <path id="bottomLineR" d="M110 80 L190 80" stroke="#BEBEBE" stroke-width="2" fill="none" />
+                <path d="M150 10 L110 80 L190 80 Z" fill="transparent" mask="url(#maskGrayRight)" id="fillGrayR" />
+                <path d="M150 30 L125 70 L175 70 Z" fill="transparent" mask="url(#maskPinkRight)" id="fillPinkR" />
+            </g>
+            <!-- 水平方向寬度 = 2 × rx = 120 單位 、 垂直方向高度 = 2 × ry = 110 單位-->
+           <ellipse id="head" cx="100" cy="130" rx="60" ry="55" fill="none" stroke="#e3e3e3" stroke-width="2" filter="url(#puffy)" style="z-index: 10;"/>
+           <g id="eyes" transform="translate(100, 118)">
+                <g>
+                    <circle class="eyes" cx="-18" cy="0" r="6" stroke="#333" stroke-width="2" fill="none" />
+                    <circle class="highlight" cx="-16" cy="-2.5" r="1.5" stroke="#333" stroke-width="0.5" fill="none" />
+                </g>
+                <g>
+                    <circle class="eyes" cx="18" cy="0" r="6" stroke="#333" stroke-width="2" fill="none" />
+                    <circle class="highlight" cx="20" cy="-2.5" r="1.5" stroke="#333" stroke-width="0.5" fill="none" />
+                </g>
+            </g>
+            <g id = "nose" transform = "translate(100, 136)" scale = "0.5">
+                <!-- Cubic Bézier 曲線：從當前點畫到 (0, -8)，控制點是 (-10,-7) 和 (-5,-8)。 -->
+                <path id = "noseFill" d = "M-10 -4 C-10 -7 -5 -8 0 -8 C5 -8 10 -7 10 -4 C10 -1, 8 2, 4 4 L0 6,-4 4 C-8 2, -10 -1, -10, -4 Z" fill = "transparent" />
+                <path id="noseLine" d="M-10 -4 C-10 -7, -5 -8, 0 -8 C5 -8, 10 -7, 10 -4 C10 -1, 8 2, 4 4 L0 6 L-4 4 C-8 2, -10 -1, -10 -4 Z" fill="none" stroke="#222" stroke-width="1.5" />
+            </g>
+            <g id="mouths" transform="translate(100, 145)">
+                <path id="mouthLine" d="M-15 0 Q 0 10 15 0" fill="none" stroke="#222" stroke-width="2" />
+                <path id="mouthLine2" d="M-12 2 Q 0 28 12 2" fill="none" stroke="#222" stroke-width="2" />
+                <g id="tongue" transform="translate(0, 2)">
+                    <path id="tongueFill" d="M-10 0 C-10 22, 10 22, 10 0 Z" fill="transparent"/>
+                </g>
+            </g>
+            <g id="blushes" transform="translate(100, 130)">
+                <ellipse class="blush" cx="-35" cy="5" rx="8" ry="6" stroke="#FFB6C1" stroke-width="1" fill="none" />
+                <ellipse class="blush" cx="35" cy="5" rx="8" ry="6" stroke="#FFB6C1" stroke-width="1" fill="none" />
+            </g>
+
+<defs>
+    <g id="branch-template">
+        <path d="M0,0 Q100,-20 250,50 T500,20" fill="none" stroke="#3D2B1F" stroke-width="14" stroke-linecap="round" />
+        <path d="M150,20 Q200,-50 300,-70" fill="none" stroke="#3D2B1F" stroke-width="8" stroke-linecap="round" />
+        <path d="M350,40 Q400,100 500,110" fill="none" stroke="#3D2B1F" stroke-width="6" stroke-linecap="round" />
+        <g filter="url(#puffy)">
+            <ellipse cx="80" cy="-10" rx="40" ry="15" fill="#1B4D1B" transform="rotate(-20,80,-10)" />
+            <ellipse cx="180" cy="-40" rx="35" ry="12" fill="#2D5A27" transform="rotate(-10,180,-40)" />
+            <ellipse cx="300" cy="-80" rx="45" ry="18" fill="#1B4D1B" />
+            <ellipse cx="450" cy="20" rx="50" ry="20" fill="#4E8B42" />
+            <ellipse cx="500" cy="110" rx="40" ry="15" fill="#2D5A27" />
+            <circle cx="200" cy="-20" r="8" fill="#A8D08D" />
+            <circle cx="380" cy="50" r="10" fill="#759172" />
+            <circle cx="480" cy="0" r="7" fill="#A8D08D" />
+        </g>
+    </g>
+</defs>
+
+<g id="forest-frame" filter="url(#puffy)">
+    <use href="#branch-template" transform="translate(-50, 20) rotate(10)" />
+    <use href="#branch-template" transform="translate(-30, -10) scale(0.8) rotate(40)" />
+
+    <use href="#branch-template" transform="translate(1250, 0) scale(-1, 1) rotate(15)" />
+    <use href="#branch-template" transform="translate(1200, -20) scale(-0.7, 0.7) rotate(45)" />
+
+    <use href="#branch-template" transform="translate(-20, 380) rotate(-40)" />
+    <use href="#branch-template" transform="translate(50, 420) scale(0.6) rotate(-70)" />
+
+    <use href="#branch-template" transform="translate(1220, 380) scale(-1, 1) rotate(-35)" />
+    <use href="#branch-template" transform="translate(1100, 410) scale(-0.5, 0.5) rotate(-60)" />
+</g>
+            
+
+        </svg>
+    </div>
+
+</body>
+<script src="js/homepage.js"></script>
+</html>

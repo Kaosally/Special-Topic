@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html lang="zh-TW">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Pomeranian Grain Art</title>
+
+    <style>
+
+        body, html { margin: 0; padding: 0; background: #fbe5d8; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+
+        canvas { filter: contrast(1.1); } /* 增強顆粒對比度 */
+
+        .text { position: absolute; bottom: 15%; width: 100%; text-align: center; color: #8d7361; font-family: "Microsoft JhengHei", sans-serif; font-size: 22px; letter-spacing: 4px; }
+
+    </style>
+
+</head>
+
+<body>
+
+
+
+<div class="text">我們在這裡，靜候您的光臨</div>
+
+<canvas id="pomCanvas"></canvas>
+
+
+
+<script>
+
+const canvas = document.getElementById('pomCanvas');
+
+const ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+
+canvas.height = window.innerHeight;
+
+
+
+// 核心技術：噴槍顆粒渲染
+
+function sprayGrain(x, y, radius, color, count, scatter = 1) {
+
+    ctx.fillStyle = color;
+
+    for (let i = 0; i < count; i++) {
+
+        const angle = Math.random() * Math.PI * 2;
+
+        const r = Math.pow(Math.random(), scatter) * radius; // 控制顆粒向中心集中
+
+        const px = x + Math.cos(angle) * r;
+
+        const py = y + Math.sin(angle) * r;
+
+        ctx.fillRect(px, py, 1.2, 1.2);
+
+    }
+
+}
+
+
+
+function drawDetailedPom(x, y) {
+
+    // 1. 耳朵內側 (淡淡的粉棕色)
+
+    sprayGrain(x - 55, y - 80, 25, '#eec9bc', 800);
+
+    sprayGrain(x + 55, y - 80, 25, '#eec9bc', 800);
+
+
+
+    // 2. 身體輪廓 - 金黃色外層 (營造厚度)
+
+    sprayGrain(x, y + 20, 110, '#dcb68d', 8000, 0.5);
+
+   
+
+    // 3. 核心白毛 - 奶油白 (覆蓋中心區塊)
+
+    sprayGrain(x, y + 10, 85, '#ffffff', 10000, 0.7);
+
+
+
+    // 4. 手與腳 (小巧的顆粒堆疊)
+
+    sprayGrain(x - 45, y + 110, 20, '#dcb68d', 1000); // 左腳
+
+    sprayGrain(x + 45, y + 110, 20, '#dcb68d', 1000); // 右腳
+
+
+
+    // 5. 五官精修
+
+    // 眼睛 (深邃且有高光)
+
+    sprayGrain(x - 32, y - 15, 10, '#1a1a1a', 800);
+
+    sprayGrain(x + 32, y - 15, 10, '#1a1a1a', 800);
+
+    ctx.fillStyle = "white";
+
+    ctx.beginPath();
+
+    ctx.arc(x - 29, y - 18, 2.5, 0, Math.PI*2);
+
+    ctx.arc(x + 35, y - 18, 2.5, 0, Math.PI*2);
+
+    ctx.fill();
+
+
+
+    // 鼻子 (精確的倒三角)
+
+    sprayGrain(x, y + 5, 8, '#000', 500);
+
+
+
+    // 微笑與吐舌
+
+    ctx.strokeStyle = '#222';
+
+    ctx.lineWidth = 2;
+
+    ctx.beginPath();
+
+    ctx.arc(x, y - 3, 20, 0.2 * Math.PI, 0.8 * Math.PI); // 微笑
+
+    ctx.stroke();
+
+   
+
+    // 吐舌頭 (鮮艷粉紅)
+
+    sprayGrain(x, y + 20, 10, '#f15b5b', 800);
+
+}
+
+
+
+// 裝飾用腳印
+
+function drawPaw(x, y) {
+
+    const c = 'rgba(212, 163, 115, 0.4)';
+
+    sprayGrain(x, y, 12, c, 300);
+
+    sprayGrain(x - 10, y - 12, 6, c, 150);
+
+    sprayGrain(x, y - 15, 6, c, 150);
+
+    sprayGrain(x + 10, y - 12, 6, c, 150);
+
+}
+
+
+
+function render() {
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const spacing = canvas.width / 4;
+
+   
+
+    // 畫腳印
+
+    drawPaw(spacing - 100, canvas.height * 0.3);
+
+    drawPaw(spacing * 2 + 120, canvas.height * 0.25);
+
+    drawPaw(spacing * 3 - 50, canvas.height * 0.7);
+
+
+
+    // 畫三隻博美
+
+    drawDetailedPom(spacing, canvas.height * 0.45);
+
+    drawDetailedPom(spacing * 2, canvas.height * 0.45);
+
+    drawDetailedPom(spacing * 3, canvas.height * 0.45);
+
+}
+
+
+
+render();
+
+window.addEventListener('resize', () => {
+
+    canvas.width = window.innerWidth;
+
+    canvas.height = window.innerHeight;
+
+    render();
+
+});
+
+</script>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>領養契合度系統 - 戰友版</title>
+    <style>
+        /* 基礎背景（模擬妳的網頁環境） */
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0f172a; /* 深藍黑色底 */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* 模擬妳原本的跳跳糖面板 */
+        .main-panel {
+            position: relative;
+            width: 400px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.2rem;
+        }
+
+        /* --- 妳的垂直標籤按鈕 (修正版) --- */
+        .evaluate-btn {
+            writing-mode: vertical-lr;
+            letter-spacing: 5px;
+            padding: 20px 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-left: none; /* 讓它看起來像從面板長出來 */
+            border-radius: 0 15px 15px 0;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+
+            /* 定位貼在面板右側 */
+            position: absolute;
+            right: -48px; /* 根據寬度調整，貼齊邊緣 */
+            top: 50px;
+        }
+
+        .evaluate-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 10px 0 20px rgba(255, 255, 255, 0.1);
+            padding-right: 15px; /* 移上去微往外推 */
+        }
+
+        /* --- 評估表單遮罩 (Overlay) --- */
+        .overlay {
+            display: none; /* 預設隱藏 */
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* --- 科幻感彈窗 (Modal) --- */
+        .evaluate-modal {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 40px;
+            border-radius: 30px;
+            color: white;
+            width: 380px;
+            text-align: left;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .evaluate-modal h2 {
+            margin-top: 0;
+            text-align: center;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* 帥氣的單選組 */
+        .radio-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .radio-group label {
+            cursor: pointer;
+            padding: 5px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            transition: 0.3s;
+        }
+
+        .radio-group input[type="radio"] {
+            display: none;
+        }
+
+        .radio-group input[type="radio"]:checked + label {
+            background: white;
+            color: black;
+            box-shadow: 0 0 15px white;
+        }
+
+        /* 帥氣的拉桿 */
+        .slider {
+            width: 100%;
+            cursor: pointer;
+            accent-color: #ffffff;
+        }
+
+        .submit-eval-btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px;
+            background: white;
+            color: black;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .submit-eval-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-panel">
+        這裡原本是妳的跳跳糖面板
+        
+        <button class="evaluate-btn" id="openModal">
+            透過條件選出與您最契合的毛孩
+        </button>
+    </div>
+
+    <div id="evaluate-overlay" class="overlay">
+        <div class="evaluate-modal">
+            <h2>領養評估系統</h2>
+            <form id="adoption-form">
+                
+                <div class="form-group">
+                    <label>家庭環境是否有小孩？</label>
+                    <div class="radio-group">
+                        <input type="radio" name="has_kid" value="yes" id="kid-yes">
+                        <label for="kid-yes">有小孩</label>
+                        
+                        <input type="radio" name="has_kid" value="no" id="kid-no" checked>
+                        <label for="kid-no">無小孩</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>理想的寵物能量/活潑度 (0 - 100)</label>
+                    <input type="range" name="lively" min="0" max="100" value="50" class="slider">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.7rem; margin-top: 5px;">
+                        <span>安靜文雅</span>
+                        <span>活力充沛</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>居住空間類型</label>
+                    <select name="space" style="width: 100%; background: none; color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px; border-radius: 5px;">
+                        <option value="apartment" style="color: black;">都市公寓 / 套房</option>
+                        <option value="house" style="color: black;">獨棟透天 / 有院子</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-eval-btn">開始計算命運契合度</button>
+            </form>
+            <p id="closeModal" style="text-align: center; font-size: 0.8rem; margin-top: 20px; cursor: pointer; opacity: 0.5;">[ 點擊此處取消回上一頁 ]</p>
+        </div>
+    </div>
+
+    <script>
+        const openBtn = document.getElementById('openModal');
+        const overlay = document.getElementById('evaluate-overlay');
+        const closeBtn = document.getElementById('closeModal');
+        const form = document.getElementById('adoption-form');
+
+        // 開啟
+        openBtn.addEventListener('click', () => {
+            overlay.style.display = 'flex';
+        });
+
+        // 關閉
+        closeBtn.addEventListener('click', () => {
+            overlay.style.display = 'none';
+        });
+
+        // 提交表單
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // 抓取數據
+            const formData = new FormData(form);
+            const userChoices = {
+                has_kid: formData.get('has_kid'),
+                lively: formData.get('lively'),
+                space: formData.get('space')
+            };
+
+            console.log("傳送至後端的數據：", userChoices);
+            
+            // 模擬後端回傳後的操作
+            alert("後端 Node.js 已接收數據！正在分析 20 隻寵物與您的契合度...");
+            overlay.style.display = 'none';
+            
+            // 這裡之後會接動畫：炸裂跳跳糖面板 -> 換成匹配成功的寵物
+        });
+
+        // 點擊遮罩背景也可關閉
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                overlay.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

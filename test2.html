@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/homepage.css">
+    <title>Document</title>
+</head>
+<body>
+<header>
+    <nav class = "navbar">
+        <ul class = "nav-links">
+            <!-- 表示「無序清單，用來包住主選單項目。 -->
+            <li><a href = "#" class = "active">首頁</a></li>
+            <!-- 列表項目 -->
+            <li><a href = "#">寵物友善空間</a>
+            <ul class = "has-submenu">
+                <li><a href = "#">空間總覽</a></li>
+                <li><a href = "#">地圖搜尋</a></li>
+                <li><a href = "#">空間規範說明</a></li>
+            </ul>
+            </li>
+            <li><a href = "#">中途之家</a>
+            <ul class = "has-submenu">
+                <li><a href = "#">中途之家總覽</a></li>
+                <li><a href = "#">可互動時段說明</a></li>
+                <li><a href = "#">空間規範說明</a></li>
+            </ul>
+            </li>
+            <li><a href = "#">預約互動</a>
+            <ul class = "has-submenu">
+                <li><a href = "#">我要預約</a></li>
+                <li><a href = "#">預約流程說明</a></li>
+            </ul>
+            </li>
+            <li><a href = "#">會員中心</a>
+            <ul class = "has-submenu">
+                <li><a href = "#">我的預約</a></li>
+                <li><a href = "#">我的評論</a></li>
+                <li><a href = "#">個人資料</a></li>
+                <li><a href = "#">登出</a></li>
+            </ul>
+            </li>
+        </ul>
+
+        <div class = "hamburger">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
+</header>
+
+<div class="container">
+    <div class = "section1">
+    <div class="stamp-overlay">
+        <svg id="welcome-svg" viewBox="0 0 1000 400">
+            <defs>
+                <!-- 意思為金墨濾，反正就是welcome要套用的樣式-->
+                <!-- 預設情況下，filter 的作用範圍其實剛好貼齊原本圖形的 bounding box。如果你不把範圍放大，就會出現邊緣被切掉的情況。它作用的範圍要 比原本圖形大一圈 -->
+                <!-- x="-20%" 往左多延伸 20%、y="-20%"往上多延伸 20% width="140%" 原本 100% + 左邊 20% + 右邊 20%、height="140%" 原本 100% + 上 20% + 下 20% -->
+                <filter id="gold-ink-filter" x="-20%" y="-20%" width="140%" height="140%">
+                    <!-- filter effect（濾鏡效果）、Turbulence = 湍流、亂流， 產生一張「亂亂的紋理圖」
+                    fractalNoise = 自然系（雲、煙、墨）
+                    Frequency 越高 → 越吵 Frequency 越低 → 越大塊 
+                    -->
+                    <!-- 會產生一張
+                    自然系的「灰階雜訊圖」（長得像皺紋紙 / 雲 / 墨），
+                    紋理偏大塊（baseFrequency 低），
+                    疊了 5 層不同尺度的細節（numOctaves），
+                    結果命名為 noise（只是名字，不是聲音噪音）。 -->
+                    <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="5" result="noise" />
+                    <!-- Displacement = 位移、推開、擠開 ， 用一張圖，去「推動」另一張圖的像素位置、distorted = 被扭曲的-->
+                    <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" result="distorted" />
+                    
+                    <!-- 這一段就是真的讓文字閃金光的魔法 -->
+                    <!-- Specular = 高光、鏡面反射 、數字越大 → surfaceScale光影對比越強，凸起感更明顯 太小 → 閃光不明顯、constant = 強度-->
+                    <!-- exponent = 指數、尖銳度 小 → 高光分散，像磨砂金 大 → 高光尖銳，像鍍金亮點-->
+                    <feSpecularLighting surfaceScale="3" specularConstant="1.5" specularExponent="20" lighting-color="#D4AF37" in="noise" result="specularOut">
+                        <!-- PointLight = 點光源  光從這個點射出去，照到凸起表面產生高光-->
+                        <fePointLight id="gold-light" x="100" y="-50" z="250" />
+                    </feSpecularLighting>
+                    <!-- Composite = 合成、拼接、混合 feComposite = 用某種規則，把兩張圖合成一張 -->
+                    <!-- operator = 操作方式、運算規則 "in" = 在裡面 只留下「in 裡面有、而且 in2 也有的地方」-->
+                    <!-- 這一行就是用 welcome 當遮罩，把金光裁成只存在於 welcome 裡。 -->
+                    <feComposite in="specularOut" in2="SourceGraphic" operator="in" result="gold-shine" />
+                    
+                    <!-- Merge = 合併、合流、疊在一起  ， feMerge = 把多張影像「直接疊起來」-->
+                    <feMerge>
+                        <!-- 每一個 feMergeNode = 要疊上去的一張圖 -->
+                        <!-- 下面放一張「文字圖」（distorted），上面疊一張「透明底的金色紙」（gold-shine）。-->
+                        <feMergeNode in="distorted" />
+                        <feMergeNode in="gold-shine" />
+                    </feMerge>
+                </filter>
+            </defs>
+            <!-- 這個 <g> 裡的都是「筆刷字」的部件 -->
+            <g class="brush-text-group" fill="none" filter="url(#gold-ink-filter)">
+                <!-- Y 值越小 → 越靠上，Y 值越大 → 越靠下 -->
+                <path class="letter" stroke-width="14" d="M60,160 C80,280 120,320 150,200 C170,300 220,320 260,160" />
+                <path class="letter" stroke-width="12" d="M300,240 C300,180 370,180 370,230 C370,270 310,280 300,240 L380,240" />
+                <path class="letter" stroke-width="12" d="M420,120 Q420,280 420,280" /> <!-- Q 後面第一個點 (420,280) 是 控制點，決定曲線的形狀，後面第二個點 (420,280) 是 終點，曲線畫到這裡結束-->
+                <path class="letter" stroke-width="12" d="M530,210 C480,210 470,280 530,280" /><!-- 這條路徑從 (530,210) 開始，筆先落在這個點上，這就是起點。然後，曲線要畫到終點 (530,280)。在這個過程中，有兩個控制點 (480,210) 和 (470,280)，它們不會被筆直接畫到，而是像隱形的磁鐵一樣牽引筆的走向。-->
+                <path class="letter" stroke-width="12" d="M580,245 A35,40 0 1,1 650,245 A35,40 0 1,1 580,245" />
+                <!-- A35,40 0 1,1 650,245 → 第一個橢圓弧
+                35,40 → 橢圓的半徑 x=35, y=40
+                0 → 橢圓旋轉角度 0 度
+                1 → 大弧標記（large-arc-flag） → 選擇大弧
+                1 → sweep flag → 確定方向（順時針）
+                650,245 → 弧線終點 -->
+                <path class="letter" stroke-width="12" d="M690,280 L690,210 Q730,180 760,230 L760,280 Q800,180 830,230 L830,280" /> <!-- 整段筆順是一筆接一筆：先左邊柱子 → 再右邊柱子，類似畫兩個拱門或兩個小山峰連在一起。 -->
+                <path class="letter" stroke-width="12" d="M870,240 C870,180 940,180 940,230 C940,270 880,280 870,240 L950,240" />
+
+                <!-- 深綠色 -->
+                <g fill="#1A4D1B" stroke="none">
+                    <!-- 因為高度是 0，實際上目前看不到矩形，只會有動畫拉長效果才會變成「滴下來的形狀」 -->
+                    <rect class="drip drip-1" x="145" y="270" width="6" height="0" rx="3" /> <!-- 矩形寬度 6 單位 、 高度 0（所以初始看起來是「沒高度的線」）、圓角半徑 3-->
+                    <rect class="drip drip-2" x="417" y="270" width="5" height="0" rx="2.5" />
+                    <rect class="drip drip-3" x="757" y="270" width="6" height="0" rx="3" />
+                    <rect class="drip drip-4" x="900" y="260" width="4" height="0" rx="2" />
+                </g>
+            </g>
+        </svg>
+    </div>
+    <svg width="100vw" height="100vh" viewBox="0 0 1200 289" class = "section1-svg">
+
+        <!--在 SVG 裡，<defs> 是 “definitions”（定義）的縮寫。它的意思就是：先定義一些東西，但不直接顯示在畫布上，等你需要的時候再拿出來用。-->
+        <defs>
+            <filter id = "puffy">
+                <!-- 生成一個 隨機凹凸的圖案（像皺巴巴的紙、波浪紋理）。 -->
+                <!-- fractalNoise = 用柔和連續的皺紋紙、baseFrequency="0.09"
+皺紋的密度：不太細也不太粗-->
+                <feTurbulence type = "fractalNoise" baseFrequency = "0.09" numOctaves = "4" result = "noise"/>
+                <!-- <feDisplacementMap> 會把這個凹凸圖案套到圓形上，讓原本光滑的圓形 某些地方凸起，某些地方凹下。 -->
+                <!-- 控制扭曲的強度，也就是偏移的幅度 單位是像素或 SVG 單位 數字越大 → 圖形被拉扯得越明顯、數字越小 → 變形很輕微，這裡 15 → 圖形有明顯的凸起和凹下，形成蓬鬆效果 -->
+                <feDisplacementMap in = "SourceGraphic" in2 = "noise" scale = "15"/>
+            </filter>
+
+            <mask id="maskGrayLeft">
+                <!-- → 白色 = 允許底下圖層被看到 -->
+                <rect x="0" y="0" width="1200px" height="400px" fill="white">
+                    <!-- 當動畫跑到第 3 秒時，灰色填色的 path 開始「被遮罩放行」，
+                    當跑到第 4 秒時，粉色填色的 path 開始「被另一個遮罩放行」。
+                    fill="freeze" → 動畫結束後，保持動畫最後的狀態不變
+                    -->
+                    <animate attributeName="y" from="-400" to="0" dur="1s" fill="freeze" begin="3s">
+                    </animate>
+                </rect>
+            </mask>
+
+            <mask id="maskPinkLeft">
+                <rect x="0" y="0" width="1200" height="400" fill="white">
+                    <animate attributeName="y" from="-400" to="0" dur="1s" fill="freeze" begin="4s" />
+                </rect>
+            </mask>
+
+            <mask id="maskGrayRight">
+                <rect x="0" y="0" width="1200" height="400" fill="white">
+                    <animate attributeName="y" from="-400" to="0" dur="1s" fill="freeze" begin="3s" />
+                </rect>
+            </mask>
+
+            <mask id="maskPinkRight">
+                <rect x="0" y="0" width="1200" height="400" fill="white">
+                    <animate attributeName="y" from="-400" to="0" dur="1s" fill="freeze" begin="4s" />
+                </rect>
+            </mask>
+
+            <!-- 因為 SVG 的 <animate> 有一個鐵則：<animate> 一定要掛在「被改變的元素」裡面。 -->
+            <g id = "single-petal">
+                <path d = "M50 50 C35 45, 30 30, 35 15 L50 25 L65 15 C70 30 65 45 50 50 Z" />
+                <path d = "M48 44 L46 36" stroke-width="0.8" stroke="#ff88bb"/>
+                <path d = "M50 43 L50 35" stroke-width="0.8" stroke="#ff88bb"/>
+                <path d = "M52 44 L54 36" stroke-width="0.8" stroke="#ff88bb"/>
+            </g>
+            <g id="sakura" fill="#ffeef5" stroke="#ff88bb" stroke-width="1">
+                <g transform="translate(-50, -50)">
+                    <use href="#single-petal" transform="rotate(0, 50, 50)" />
+                    <use href="#single-petal" transform="rotate(72, 50, 50)" />
+                    <use href="#single-petal" transform="rotate(144, 50, 50)" />
+                    <use href="#single-petal" transform="rotate(216, 50, 50)" />
+                    <use href="#single-petal" transform="rotate(288, 50, 50)" />
+                </g>
+            </g>
+
+            <g id = "MapleLeaves" fill = "orange" stroke = "#ee6655" stroke-width = "1" transform = "scale(1.2)">
+                <path d="M50 5 L55 25 L75 30 L60 45 L70 65 L50 55 L30 65 L40 45 L25 30 L45 25 Z"/>
+
+            </g>
+            
+            <g id="branch-template">
+                <!-- T 是表示「幫我接著剛剛的彎曲方向繼續畫，不用再給控制點。」-->
+                <path d="M0,0 Q100,-20 250,50 T500,20" fill="none" stroke="#3D2B1F" stroke-width="14" stroke-linecap="round" />
+                <path d="M150,20 Q200,-50 300,-70" fill="none" stroke="#3D2B1F" stroke-width="8" stroke-linecap="round" />
+                <path d="M350,40 Q400,100 500,110" fill="none" stroke="#3D2B1F" stroke-width="6" stroke-linecap="round" />
+                <g filter="url(#puffy)">
+                    <!-- rotate(角度, 旋轉中心X, 旋轉中心Y) ， 「這顆橢圓，以自己中心為軸，逆時針轉 20 度」 。-->
+                    <!-- 畫了一片葉子 > 你幫這片葉子加了一個效果：「幫它畫一個有點糊、有點膨起來的影子在下面」 -->
+                    <ellipse cx="80" cy="-10" rx="40" ry="15" fill="#1B4D1B" transform="rotate(-20,80,-10)" />
+                    <ellipse cx="180" cy="-40" rx="35" ry="12" fill="#2D5A27" transform="rotate(-10,180,-40)" />
+                    <ellipse cx="300" cy="-80" rx="45" ry="18" fill="#1B4D1B" />
+                    <ellipse cx="450" cy="20" rx="50" ry="20" fill="#4E8B42" />
+                    <ellipse cx="500" cy="110" rx="40" ry="15" fill="#2D5A27" />
+                    <circle cx="200" cy="-20" r="8" fill="#A8D08D" />
+                    <circle cx="380" cy="50" r="10" fill="#759172" />
+                    <circle cx="480" cy="0" r="7" fill="#A8D08D" />
+                </g>
+            </g>
+
+            <g id="single-weed">
+                <!-- 起點在 (0, 50)（草的底部）> 二次貝茲曲線，往左上彎 > 再往更高、更右上延伸（草尖）> 從另一側彎回來，形成厚度 > 回到接近底部 > 封閉形狀 -->
+                <path d="M 0 50 Q 15 10 20 -20 Q 40 -120 60 -180 Q 45 -110 35 -10 Q 18 30 10 50 Z" />
+            </g>
+            <g id="single-weed-mid">
+                <path d="M 0 50 Q 12 20 18 0 Q 30 -60 45 -100 Q 35 -50 28 0 Q 15 25 10 50 Z" />
+            </g>
+
+            <g id="single-weed-short">
+                <path d="M 0 50 Q 10 30 15 15 Q 25 -10 35 -40 Q 28 -5 20 15 Q 12 35 8 50 Z" />
+            </g>
+
+            <g id="single-weed-green">
+                <path d="M5,30 Q2,15 5,0 Q8,15 5,30 Z"/>
+            </g>
+            <g id = "trunk">
+                <path d = "M10 177 L30 -300 L100 -300 L100 177 Z" fill = "#002424" />
+            </g>
+            <g id = "trunk-two">
+                <path d="M10 177 L15 -300 L45 -300 L70 177 Z" fill="#002424" />
+            </g>
+        </defs>
+        <g id="trunk-module">
+            <use href="#trunk" transform="translate(-10, 0)" opacity="0.4" />
+            <use href="#trunk" transform="translate(120, 0) skewX(8)" opacity="0.6" />
+            <use href="#trunk-two" transform="translate(300, 0)" opacity="0.3" />
+            <use href="#trunk-two" transform="translate(900, 0)" opacity="0.3" />
+            <use href="#trunk" transform="translate(1050, 0)" opacity="0.4" />
+            <use href="#trunk" transform="translate(750, 20)" opacity="0.2" />
+        </g>
+        <g id = "background" transform="translate(0, 0)">
+            <g id="grass">
+                <path class="float-slow" d="M-10 180 Q300 150, 850 190 T1200 160 L1200 400 L0 400 Z" fill="#013220" filter="url(#puffy)" />
+                <path class="float-medium" d="M-10 210 Q350 180, 700 220 T1200 200 L1200 400 L0 400 Z" fill="#1B4D1B" filter="url(#puffy)" />
+            </g>
+            <g id = "stone">
+                <g transform="translate(150, 350) rotate(-5)">
+                    <ellipse cx="2" cy="2" rx="35" ry="12" fill="#333" opacity="0.3" />
+                    <ellipse cx="0" cy="0" rx="32" ry="11" fill="#888888" filter="url(#puffy)" />
+                    <ellipse cx="5" cy="-2" rx="12" ry="4" fill="#BBBBBB" opacity="0.4" />
+                </g>
+
+                <g transform = "translate(300,320)">
+                    <ellipse cx = "5" cy = "5" rx = "30" ry = "10" fill = "#333" opacity = "0.3" />
+                    <ellipse cx = "0" cy = "0" rx = "27" ry = "9" fill = "#8E8E8E" filter="url(#puffy)" />
+                    <ellipse cx = "-5" cy = "-2" rx = "10" ry = "3" fill = "#A6A6A6" filter="url(#puffy)"/>
+                </g>
+
+                <g transform = "translate(550,320) rotate(15)">
+                    <ellipse cx = "5" cy = "5" rx = "30" ry = "10" fill = "#333" opacity = "0.3" />
+                    <ellipse cx = "0" cy = "0" rx = "27" ry = "9" fill = "#8E8E8E" filter="url(#puffy)" />
+                    <ellipse cx = "-5" cy = "-2" rx = "10" ry = "3" fill = "#A6A6A6" filter="url(#puffy)"/>
+                </g>
+
+                <g transform = "translate(850,310) scale(1.2)">
+                    <ellipse cx = "2" cy = "2" rx = "25" ry = "8" fill = "#333" opacity = "0.3" />
+                    <ellipse cx = "0" cy = "0" rx = "18" ry = "7" fill = "#7A7A7A" filter="url(#puffy)" />
+                    <ellipse cx = "-5" cy = "-2" rx = "10" ry = "2" fill = "#A6A6A6" filter="url(#puffy)"/>
+                </g>
+
+                <g transform="translate(1050, 340) rotate(10)">
+                    <ellipse cx="2" cy="2" rx="28" ry="9" fill="#333" opacity="0.3" />
+                    <ellipse cx="0" cy="0" rx="23" ry="8" fill="#999999" filter="url(#puffy)" />
+                    <ellipse cx="-4" cy="-3" rx="8" ry="2" fill="#FFFFFF" opacity="0.2" />
+                </g>
+            </g>
+
+
+            <g class = "park-pond" transform = "translate(1050,190)">
+                <ellipse cx = "0" cy = "0" rx = "260" ry = "55" fill = "#013220" filter = "url(#puffy)" class = "float-slow" />
+                <ellipse class="pond-water" cx = "0" cy = "0" rx = "240" ry = "35" fill = "#2F6468"/>  
+                <g class="water-reflections" stroke="white" stroke-width="2" fill="none" opacity="0.6">
+                    <path d="M-150 -15 Q0 -25, 150 -15" />
+                    <path d="M-120 5 Q-60 15, 0 5" />
+                    <path d="M20 10 Q80 0, 140 10" />
+                    <path d="M-60 22 Q0 28, 60 22" />
+                </g>
+            </g>
+        </g>
+        <g id="weeds-green" transform="translate(500, 60)">
+            <use href="#single-weed-green" x="480" y="210" fill="#006030" transform="scale(0.7)" />
+            <use href="#single-weed-green" x="460" y="180" fill="#006030" transform="rotate(15)" />
+            <use href="#single-weed-green" x="440" y="220" fill="#006030" />
+            <use href="#single-weed-green" x="420" y="190" fill="#006030" transform="scale(1.1) rotate(-5)" />
+            <use href="#single-weed-green" x="400" y="200" fill="#006030" />
+            <use href="#single-weed-green" x="380" y="230" fill="#006030" transform="scale(0.9) rotate(10)" />
+            <use href="#single-weed-green" x="340" y="210" fill="#006030" transform="scale(0.8)" />
+            <use href="#single-weed-green" x="320" y="195" fill="#006030" />
+            <use href="#single-weed-green" x="300" y="215" fill="#006030" transform="rotate(5)" />
+            <use href="#single-weed-green" x="280" y="189" fill="#006030" transform="scale(1.2)" />
+            <use href="#single-weed-green" x="260" y="225" fill="#006030" />
+            <use href="#single-weed-green" x="240" y="205" fill="#006030" transform="rotate(-8)" />
+            <use href="#single-weed-green" x="220" y="190" fill="#006030" />
+            <use href="#single-weed-green" x="200" y="210" fill="#006030" transform="scale(0.7)" />
+            <use href="#single-weed-green" x="180" y="180" fill="#006030" />
+            <use href="#single-weed-green" x="160" y="230" fill="#006030" transform="rotate(20)" />
+            <use href="#single-weed-green" x="100" y="200" fill="#006030" />
+            <use href="#single-weed-green" x="50" y="185" fill="#006030" transform="scale(1.1)" />
+            <use href="#single-weed-green" x="0" y="210" fill="#006030" transform="rotate(-10)" />
+            <use href="#single-weed-green" x="-50" y="175" fill="#006030" />
+            <use href="#single-weed-green" x="-100" y="230" fill="#006030" transform="scale(0.8)" />
+            <use href="#single-weed-green" x="-150" y="205" fill="#006030" />
+            <use href="#single-weed-green" x="-230" y="150" fill="#006030" />
+            <use href="#single-weed-green" x="-260" y="130" fill="#006030" transform="scale(0.9)" />
+            <use href="#single-weed-green" x="-300" y="200" fill="#006030" transform="rotate(-5)" />
+            <use href="#single-weed-green" x="-330" y="140" fill="#006030" />
+            <use href="#single-weed-green" x="-360" y="110" fill="#006030" transform="scale(1.1)" />
+            <use href="#single-weed-green" x="-380" y="170" fill="#006030" />
+            <use href="#single-weed-green" x="-410" y="100" fill="#006030" />
+            <use href="#single-weed-green" x="-430" y="220" fill="#006030" transform="rotate(12)" />
+            <use href="#single-weed-green" x="-460" y="120" fill="#006030" />
+            <use href="#single-weed-green" x="-480" y="180" fill="#006030" transform="scale(0.8)" />
+        </g>
+        <!-- transform 用來對整個群組做 變形操作 ， scale(x, y) 是縮放函數， -1 表示 水平翻轉（鏡像），相當於把圖形沿垂直軸翻過來。 1 表示垂直方向保持原大小，不變。-->
+        <g id = "dog" transform = "scale(-1, 1)">
+            <!-- 用來對 SVG 元素的 transform 屬性 做動畫、指定要改變的屬性是 transform 、 指定動畫類型是 平移
+            freeze 表示動畫結束後元素保持在 最終位置（不會回到原來位置） 
+            -->
+            <animateTransform attributeName="transform" type="translate" from="-100 33" to="500 33" dur="5s" begin="1s" fill="freeze" />
+            <g id = "dog-breathing">
+                <g id="body" transform="translate(100,193) scale(-1,1)" > 
+                <path id="bodyLine" 
+                    d="M-35 -20 L-45 0 L-40 5 L-40 8 L-45 11 L-40 15 L-35 20 L-30 25 L-25 30 L-20 45 L-10 45 L35 45 L35 35 L45 35 L65 25 L85 15 L85 3 L85 -10 L75 -20 L65 -30 L55 -40 L62 -46 L72 -50 L82 -56 
+                        L 40 -50 L 0 -45 L -35 -20 Z" 
+                    fill="#ffffff" stroke="#e3e3e3" stroke-width="2" filter="url(#puffy)" />
+
+                <path id="tailLine" 
+                    d="M32 -56 Q 115 -75, 120 -40 Q 125 -10, 82 -15 Z" 
+                    fill="#ffffff" stroke="#e3e3e3" stroke-width="2" filter="url(#puffy)" />
+                <path id="forefoot" d="M-15 45 L-18 50 Q-18 75, -10 75 L0 65 Q8 65, 5 55 L5 45" fill="#ffffff" stroke="#e3e3e3" stroke-width="2" filter="url(#puffy)" />
+                <path id="forefoot2" d="M20 45 Q22 75, 30 75 L40 65 Q48 65, 45 55 L45 35" fill="#ffffff" stroke="#e3e3e3" stroke-width="2" filter="url(#puffy)" />
+                <path id="hindfoot" d="M60 25 Q62 65, 70 65 L80 55 Q88 55, 85 45 L85 25" fill="#ffffff" stroke="#e3e3e3" stroke-width="2" filter="url(#puffy)" />
+                </g>
+
+                <!-- 遮罩是一塊白色的布，它從上面滑下來，滑到哪裡，填色就顯示到哪裡。 -->
+                <g transform = "translate(30, 60) scale(0.5) rotate(-35, 50, 10)" filter="url(#puffy)">
+                    <path id="leftLineL" d="M50 10 L 10 80" stroke="#BEBEBE" stroke-width="2" fill="none" />
+                    <path id="rightLineL" d="M50 10 L90 80" stroke="#BEBEBE" stroke-width="2" fill="none" />
+                    <path id="bottomLineL" d="M10 80 L90 80" stroke="#BEBEBE" stroke-width="2" fill="none" />
+                    <path d="M50 10 L10 80 L90 80 Z" fill="#ffffff" mask="url(#maskGrayLeft)" id="fillGrayL" />
+                    <path d="M50 30 L25 70 L75 70 Z" fill="#FFC0CB" mask="url(#maskPinkLeft)" id="fillPinkL" />
+                </g>
+                
+                <g transform="translate(80, 30) scale(0.5) rotate(35, 50, 10)" filter="url(#puffy)">
+                    <path id="leftLineR" d="M150 10 L110 80" stroke="#BEBEBE" stroke-width="2" fill="none" />
+                    <path id="rightLineR" d="M150 10 L190 80" stroke="#BEBEBE" stroke-width="2" fill="none" />
+                    <path id="bottomLineR" d="M110 80 L190 80" stroke="#BEBEBE" stroke-width="2" fill="none" />
+                    <path d="M150 10 L110 80 L190 80 Z" fill="#ffffff" mask="url(#maskGrayRight)" id="fillGrayR" />
+                    <path d="M150 30 L125 70 L175 70 Z" fill="#FFC0CB" mask="url(#maskPinkRight)" id="fillPinkR" />
+                </g>
+                
+                <!-- 水平方向寬度 = 2 × rx = 120 單位 、 垂直方向高度 = 2 × ry = 110 單位-->
+                <ellipse id="head" cx="100" cy="130" rx="60" ry="55" fill="#ffffff" stroke="#e3e3e3" stroke-width="2" filter="url(#puffy)" style="z-index: 10;"/>
+                <g id="eyes" transform="translate(100, 118)">
+                    <g>
+                        <circle class="eyes" cx="-18" cy="0" r="6" stroke="#333" stroke-width="2" fill="#333" />
+                        <circle class="highlight" cx="-16" cy="-2.5" r="1.5" stroke="#333" stroke-width="0.5" fill="white" />
+                    </g>
+                    <g>
+                        <circle class="eyes" cx="18" cy="0" r="6" stroke="#333" stroke-width="2" fill="#333" />
+                        <circle class="highlight" cx="20" cy="-2.5" r="1.5" stroke="#333" stroke-width="0.5" fill="white" />
+                    </g>
+                </g>
+                <g id = "nose" transform = "translate(100, 136)" scale = "0.5">
+                    <!-- Cubic Bézier 曲線：從當前點畫到 (0, -8)，控制點是 (-10,-7) 和 (-5,-8)。 -->
+                    <path id = "noseFill" d = "M-10 -4 C-10 -7 -5 -8 0 -8 C5 -8 10 -7 10 -4 C10 -1, 8 2, 4 4 L0 6,-4 4 C-8 2, -10 -1, -10, -4 Z" fill = "#222222" />
+                    <path id="noseLine" d="M-10 -4 C-10 -7, -5 -8, 0 -8 C5 -8, 10 -7, 10 -4 C10 -1, 8 2, 4 4 L0 6 L-4 4 C-8 2, -10 -1, -10 -4 Z" fill="#222" stroke="#222" stroke-width="1.5" />
+                </g>
+                <g id="mouths" transform="translate(100, 145)">
+                    <path id="mouthLine" d="M-15 0 Q 0 10 15 0" fill="none" stroke="#222" stroke-width="2" />
+                    <path id="mouthLine2" d="M-12 2 Q 0 28 12 2" fill="none" stroke="#222" stroke-width="2" />
+                    <g id="tongue" transform="translate(0, 2)">
+                        <path id="tongueFill" d="M-10 0 C-10 22, 10 22, 10 0 Z" fill="#FFB6C1"/>
+                    </g>
+                </g>
+                <g id="blushes" transform="translate(100, 130)">
+                    <ellipse class="blush" cx="-35" cy="5" rx="8" ry="6" stroke="#FFB6C1" stroke-width="1" fill="#FFC0CB" />
+                    <ellipse class="blush" cx="35" cy="5" rx="8" ry="6" stroke="#FFB6C1" stroke-width="1" fill="#FFC0CB" />
+                </g>
+            </g>
+                
+        </g>
+
+        <g id="forest-frame" filter="url(#puffy)">
+            <use href="#branch-template" transform="translate(-50, 20) rotate(10)" /> <!-- 往左 50、往下 20 -->
+            <use href="#branch-template" transform="translate(-30, -10) scale(0.8) rotate(40)" /> <!-- 往左 30、往上 10， 縮小到 80% -->
+        </g>
+
+        <g id="weeds" transform="translate(15, 350)">
+            <!-- <use>標籤是用來引用一個現有的 SVG 元素， 指向 ID 為 single-weed 的 SVG 元素。-->
+            <use href="#single-weed" x="0" y="0" fill="#0d1a0d" transform = "translate(0,0) rotate(15)" />
+            <use href="#single-weed" x="0" y="0" fill="#0d1a0d" transform = "translate(15,0) rotate(-15)" />
+            <use href="#single-weed" x="0" y="0" fill="#0d1a0d" transform = "translate(18,0) rotate(-45)" />
+            <use href="#single-weed" x="0" y="0" fill="#0d1a0d" transform = "translate(5,0) rotate(-25)" />
+            <use href="#single-weed" x="0" y="0" fill="#0d1a0d" transform = "translate(2,0) rotate(-65)" />
+            <use href="#single-weed" x="0" y="0" fill="#0d1a0d" transform = "translate(50,0)" />
+            <use href="#single-weed" x="0" y="0" fill="#0d1a0d" transform = "translate(80,0)" />
+            <use href="#single-weed" x="0" y="0" fill="#0d1a0d" transform = "translate(100,0)" />
+            <use href="#single-weed" x="0" y="0" fill="#0d1a0d" transform = "translate(120,0) rotate(-35)"/>
+            <use href="#single-weed" x="0" y="0" fill="#0d1a0d" transform = "translate(140,0) rotate(-25)"/>
+            <use href="#single-weed" x="10" y="10" fill="#0d1a0d" />
+            <use href="#single-weed" x="30" y="10" transform="scale(0.8)" fill="#0a140a" />
+            <use href="#single-weed" x="-40" y="-5" transform="scale(1.1) rotate(-5)" fill="#142614" />
+            <use href="#single-weed-mid" x="0" y="0" fill="#0d1a0d" transform = "translate(180,0) rotate(5)"/>
+            <use href="#single-weed-mid" x="0" y="0" fill="#0d1a0d" transform = "translate(200,0) rotate(15)"/>
+            <use href="#single-weed-mid" x="0" y="0" fill="#0d1a0d" transform = "translate(210,0) rotate(-5)"/>
+            <use href="#single-weed-mid" x="0" y="0" fill="#0d1a0d" transform = "translate(230,0) rotate(-15)"/>
+            <use href="#single-weed-mid" x="0" y="0" fill="#0d1a0d" transform = "translate(250,0) rotate(-45)"/>
+            <use href="#single-weed-mid" x="0" y="0" fill="#0d1a0d" transform = "translate(270,6) rotate(25)"/>
+            <use href="#single-weed-mid" x="0" y="0" fill="#0d1a0d" transform = "translate(185,0) rotate(-25)"/>
+            <use href="#single-weed-mid" x="0" y="0" fill="#0d1a0d" transform = "translate(165,0) rotate(-5)"/>
+            <use href="#single-weed-mid" x="0" y="0" fill="#0d1a0d" transform = "translate(185,6) rotate(35)"/>
+            <use href="#single-weed-mid" x="0" y="0" fill="#0d1a0d" transform = "translate(290,6) rotate(25)"/>
+            <use href="#single-weed-mid" x="0" y="0" fill="#0d1a0d" transform = "translate(185,0) rotate(-25)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(305,0) rotate(-25)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(325,0) rotate(-35)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(345,0) rotate(-5)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(365,10) rotate(35)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(385,0) rotate(5)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(305,0) rotate(15)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(405,5) rotate(15)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(425,10) rotate(48)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(400,8) rotate(10)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(430,0) rotate(5)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(460,0) rotate(15)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(440,0) rotate(25)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(440,0) rotate(35)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(470,0) rotate(45)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(480,0) rotate(-45)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(490,0) rotate(-45)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(505,0) rotate(15)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(515,0) rotate(25)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(440,0) rotate(-45)"/>
+        </g>
+
+        <g id="weeds" transform="translate(1155, 350) scale(-1,1)">
+            <!-- <use>標籤是用來引用一個現有的 SVG 元素， 指向 ID 為 single-weed 的 SVG 元素。-->
+            <use href="#single-weed" x="0" y="0" fill="#0d1a0d" transform = "translate(0,0) rotate(15)" />
+            <use href="#single-weed" x="0" y="0" fill="#0d1a0d" transform = "translate(15,0) rotate(-15)" />
+            <use href="#single-weed" x="0" y="0" fill="#0d1a0d" transform = "translate(18,0) rotate(-45)" />
+            <use href="#single-weed" x="0" y="0" fill="#0d1a0d" transform = "translate(5,0) rotate(-25)" />
+            <use href="#single-weed" x="0" y="0" fill="#0d1a0d" transform = "translate(2,0) rotate(-65)" />
+            <use href="#single-weed" x="0" y="0" fill="#0d1a0d" transform = "translate(50,0)" />
+            <use href="#single-weed" x="0" y="0" fill="#0d1a0d" transform = "translate(80,0)" />
+            <use href="#single-weed" x="0" y="0" fill="#0d1a0d" transform = "translate(100,0)" />
+            <use href="#single-weed" x="0" y="0" fill="#0d1a0d" transform = "translate(120,0) rotate(-35)"/>
+            <use href="#single-weed" x="0" y="0" fill="#0d1a0d" transform = "translate(140,0) rotate(-25)"/>
+            <use href="#single-weed" x="10" y="10" fill="#0d1a0d" />
+            <use href="#single-weed" x="30" y="10" transform="scale(0.8)" fill="#0a140a" />
+            <use href="#single-weed" x="-40" y="-5" transform="scale(1.1) rotate(-5)" fill="#142614" />
+            <use href="#single-weed-mid" x="0" y="0" fill="#0d1a0d" transform = "translate(180,0) rotate(5)"/>
+            <use href="#single-weed-mid" x="0" y="0" fill="#0d1a0d" transform = "translate(200,0) rotate(15)"/>
+            <use href="#single-weed-mid" x="0" y="0" fill="#0d1a0d" transform = "translate(210,0) rotate(-5)"/>
+            <use href="#single-weed-mid" x="0" y="0" fill="#0d1a0d" transform = "translate(230,0) rotate(-15)"/>
+            <use href="#single-weed-mid" x="0" y="0" fill="#0d1a0d" transform = "translate(250,0) rotate(-45)"/>
+            <use href="#single-weed-mid" x="0" y="0" fill="#0d1a0d" transform = "translate(270,6) rotate(25)"/>
+            <use href="#single-weed-mid" x="0" y="0" fill="#0d1a0d" transform = "translate(185,0) rotate(-25)"/>
+            <use href="#single-weed-mid" x="0" y="0" fill="#0d1a0d" transform = "translate(165,0) rotate(-5)"/>
+            <use href="#single-weed-mid" x="0" y="0" fill="#0d1a0d" transform = "translate(185,6) rotate(35)"/>
+            <use href="#single-weed-mid" x="0" y="0" fill="#0d1a0d" transform = "translate(290,6) rotate(25)"/>
+            <use href="#single-weed-mid" x="0" y="0" fill="#0d1a0d" transform = "translate(185,0) rotate(-25)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(305,0) rotate(-25)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(325,0) rotate(-35)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(345,0) rotate(-5)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(365,10) rotate(35)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(385,0) rotate(5)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(305,0) rotate(15)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(405,5) rotate(15)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(425,10) rotate(48)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(400,8) rotate(10)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(430,0) rotate(5)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(460,0) rotate(15)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(440,0) rotate(25)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(440,0) rotate(35)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(470,0) rotate(45)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(480,0) rotate(-45)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(490,0) rotate(-45)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(505,0) rotate(15)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(515,0) rotate(25)"/>
+            <use href="#single-weed-short" x="0" y="0" fill="#0d1a0d" transform = "translate(440,0) rotate(-45)"/>
+        </g>
+
+    </svg>
+    </div>
+</div>
+
+<div class="section2">
+    <!-- 1320×1100是紙的大小，然後後面設定的width height 則是舞台的大小 也就是使用者真正能看到的範圍 -->
+    <svg viewBox="0 0 1320 1100" style="position: absolute; width: 100%; height: 100%;">
+        <!-- 就像畫畫的「工具箱」裡面會有漸層、濾鏡等等 -->
+        <defs>
+            <!-- 140% 意味著「濾鏡區域比物件大 40%」-->
+            <filter id="ultra-real-water" x="-20%" y="-20%" width="140%" height="140%">
+                <!-- 生成一張數學噪音紋理圖 =生成一張皺皺的紙，baseFrequency = 噪音密度 0.06、0.12表示xy方向因為水波不是正圓，所以要拉成橢圓形流動感。 -->
+                <!-- seed = 隨機種子 用來決定這張噪音圖長怎樣 seed=1 → 一種雲、seed=2 → 另一種雲、seed=50 → 完全不同水紋-->
+                <feTurbulence type="fractalNoise" baseFrequency="0.06 0.12" numOctaves="4" seed="1" result="noise1">
+                    <!-- attributeName="seed" 代表改變「噪音生成樣式」from 1 → to 100=不斷換不同亂數圖案。 -->
+                    <animate attributeName="seed" from="1" to="100" dur="15s" repeatCount="indefinite" />
+                </feTurbulence>
+                <!-- 0.01 0.02 代表： 非常低頻、超大塊流動、 慢慢推動整體水面，這邊使用2層不是 4 層的原因是 不想太細、想保持大尺度流動感、當作「主水流骨架」，不同 seed = 不同流向排列 -->
+                <feTurbulence type="fractalNoise" baseFrequency="0.01 0.02" numOctaves="2" seed="2" result="noise2">
+                    <animate attributeName="seed" from="1" to="50" dur="25s" repeatCount="indefinite" />
+                </feTurbulence>
+                <!-- operator 的意思是：👉 指定「兩張輸入圖（in、in2）」要用什麼數學方式混合在一起，arithmetic = 自訂公式混合，輸出結果 = k1*i1*i2 + k2*i1 + k3*i2 + k4，第一組數字是控制兩張圖「互相干擾」的強度，第二組是加回 noise1 原圖成分，第三組是加回 noise2 原圖成分，第四組是整體亮度補償 -->
+                <feComposite in="noise1" in2="noise2" operator="arithmetic" k1="1.5" k2="0" k3="0" k4="0" result="mixed-noise" />
+                <!-- feComponentTransfer = 用數學方式修圖調色， 使用 mixed-noise 做調整，結果存成 sharp-noise 方便後續引用 -->
+                <feComponentTransfer in="mixed-noise" result="sharp-noise">
+                    <!-- feFuncR = 紅色通道的轉換函式 -->
+                    <!-- type="discrete" tableValues="0 0.1 0.4 1" = 把顏色值平均切成 4 段，每段直接指定一個固定輸出值，沒有任何平滑過渡。 -->
+                    <!-- tableValues 給幾個值，就切成幾段顏色； type="discrete" 代表離散階梯，顏色不會連續變化，而是「啪」一下跳到下一個值； 這整段 feComponentTransfer 只是在做顏色重映射（調色），不是在改噪聲本身，簡單說 就是水流裡面，白色區域會更亮更清楚，藍色區域會更深更明顯。-->
+                    <feFuncR type="discrete" tableValues="0 0.1 0.4 1" />
+                    <feFuncG type="discrete" tableValues="0 0.2 0.5 1" />
+                    <feFuncB type="discrete" tableValues="0 0.4 0.7 1" />
+                </feComponentTransfer>
+                <!-- 用 雜訊圖（sharp-noise） 去「推拉」原本的圖形（SourceGraphic），造成明顯的扭曲效果。、 scale="55"  → 很猛的扭曲 -->
+                <feDisplacementMap in="SourceGraphic" in2="sharp-noise" scale="55" />
+            </filter>
+
+            <!-- 漸層起點 x1="1" = 100%（最右邊），y1="0" = 0%（最上面），起點在 右上角、漸層終點x2="0" = 左邊，y2="1" = 下方，終點在 左下角。 -->
+            <linearGradient id="deep-river-unit" x1="1" y1="0" x2="0" y2="1">
+                <!-- 每個 <stop> 代表漸層中的一個「顏色點」。offset 決定它在漸層的位置（0% ~ 100%）、stop-color 是顏色、stop-opacity 是透明度 -->
+                <!-- 在 SVG 漸層裡，stop-opacity 不只是透明/不透明，視覺上就是控制「亮度感」或「光線強度」。-->
+                <stop offset="0%" stop-color="#081a1a" stop-opacity="1" /> 
+                <stop offset="15%" stop-color="#2a5a5a" stop-opacity="0.9" />
+                <stop offset="50%" stop-color="#83c5be" stop-opacity="0.8" />
+                <stop offset="100%" stop-color="#edf6f9" stop-opacity="0.6" />
+            </linearGradient>
+
+            <!-- pattern代表做一小塊圖案 → SVG 自動「磁磚式重複鋪滿整個物件」。userSpaceOnUse代表：固定世界座標尺寸，意思：不管物件多大水流紋理都固定 1200px 高，這樣：水流速度穩定、紋理不會被拉伸變形。-->
+            <pattern id="flowing-river" x="0" y="0" width="1" height="1200" patternUnits="userSpaceOnUse">
+                <!-- 用「deep-river-unit 這個 pattern 貼圖」填滿它，放在畫布最上方。-->
+                <rect width="1920" height="600" fill="url(#deep-river-unit)" y="0" />
+                <!-- 放在「第一塊水面正下方」，為了避免中間出現空隙，而做的無縫銜接 -->
+                <rect width="1920" height="600" fill="url(#deep-river-unit)" y="600" />
+                <animate attributeName="y" from="-600" to="0" dur="5s" repeatCount="indefinite" />
+            </pattern>
+            <!--你的 pattern 設成 1×1200，意思是做了一條「又細又高的水流貼紙」，SVG 會自動在左右把它一直複製排開，變成一整片水面。接著動畫不是在動貼紙，而是整面貼好貼紙的牆在往下滑，因為上下兩塊水面交錯滑動，所以看起來就像水一直在流，而且永遠不會斷。-->
+        </defs>
+
+        <!-- 這條 path 其實不是「河水的一部分」，它的作用是 模擬河流的外圍光暈或水氣感，讓河流看起來更立體、有厚度，而不是單純一條死板的 path。 -->
+        <path d="M1800 -100 Q1790, 40 1700,50 Q1700,40 1600,400 Q1600,400 1000 700 Q1000,700 800,1200" 
+            fill="none" stroke="#add8e6" stroke-width="320" stroke-linecap="round" opacity="0.1" style="filter: blur(20px);" />
+
+        <g filter="url(#ultra-real-water)">
+            <path d="M1800 -100 Q1790, 40 1700,50 Q1700,40 1600,400 Q1600,400 1000 700 Q1000,700 800,1200" fill="none" stroke="url(#flowing-river)" stroke-width="300" stroke-linecap="round" stroke-linejoin="round" />            
+            <!-- mix-blend-mode 是控制「這個物件要怎麼跟底下的畫面混在一起」color-dodge 白話意思：讓上層變成「光源」，把底下顏色打亮。-->
+            <path d="M1800 -100 Q1790, 40 1700,50 Q1700,40 1600,400 Q1600,400 1000 700 Q1000,700 800,1200" fill="none" stroke="white" stroke-width="220" stroke-linecap="round" stroke-linejoin="round" opacity="0.45" style="mix-blend-mode: color-dodge;" />
+        </g>
+
+        <circle r="2" fill="white" opacity="0.6">
+            <animateMotion path="M1800 -100 Q1790, 40 1700,50 Q1700,40 1600,400 Q1600,400 1000 700 Q1000,700 800,1200" dur="3s" repeatCount="indefinite" />
+        </circle>
+    </svg>
+
+    <!-- 這邊有id是為了後面的js使用 -->
+    <div class="about-container" id="main-section">
+        <div class="visual-area">
+            <canvas id="particleCanvas"></canvas>
+            <div id="svg-layer">
+                <!-- 「把剛剛那張 200×200 的紙，顯示成 450×450 像素」 -->
+                <svg width="450" height="450" viewBox="0 0 200 200">
+                    <clipPath id="shape-clip">
+                        <path id="displayPath" d="M100,20 C120,10 140,25 150,45 C170,40 190,60 185,90 C195,120 180,150 150,165 C130,185 80,190 50,170 C20,160 5,120 15,90 C5,60 30,35 50,45 C60,20 80,10 100,20 Z" />
+                    </clipPath>
+                    <!-- xMid水平方向對齊方式：圖片水平中心對齊 SVG 容器中心、YMid垂直方向對齊方式：圖片垂直中心對齊 SVG 容器中心，slice縮放模式：圖片會填滿整個容器，如果比例不一樣，多餘部分會被裁掉。-->
+                    <image id="mainImage" href="https://images.unsplash.com/photo-1687702563085-2f550461f24c?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" width="200" height="200" preserveAspectRatio="xMidYMid slice" clip-path="url(#shape-clip)" />
+                    
+                    <g id="path-library">
+                        <path id="path1" d="M100,20 C120,10 140,25 150,45 C170,40 190,60 185,90 C195,120 180,150 150,165 C130,185 80,190 50,170 C20,160 5,120 15,90 C5,60 30,35 50,45 C60,20 80,10 100,20 Z" />
+                        <path id="path2" d="M110,25 C150,15 180,50 185,90 C190,140 150,185 100,180 C50,175 15,140 20,80 C25,30 70,35 110,25 Z" />
+                        <path id="path3" d="M100,25 C160,25 180,70 175,110 C170,160 130,185 100,185 C70,185 30,160 25,110 C20,70 40,25 100,25 Z" />
+                        <path id="path4" d="M100,30 C130,25 145,45 170,60 C185,85 175,115 170,140 C145,155 130,175 100,170 C70,175 55,155 30,140 C25,115 15,85 30,60 C55,45 70,25 100,30 Z" />
+                    </g>
+                </svg>
+            </div>
+        </div>
+
+        <div class="illustrate-text">
+            <h1 id="title">提供寵物們安全庇護</h1>
+            <p id="desc">我們走入街頭與荒野，為受困的生命提供避風港，終止流浪的惡性循環。</p>
+            <div class="btn-group">
+                <!-- 設定停用是為了讓使用者明白這是第一頁的部分 -->
+                <button id="prevBtn" onclick="prevPage()" disabled>上一頁</button>
+                <button id="nextBtn" onclick="nextPage()">下一頁</button>
+            </div>
+        </div>
+    </div>
+</div>
+<svg style="display: none;">
+  <path id="path-droplet" d="M 50,0 L 50,150 C 50,160 40,170 50,180 C 60,170 50,160 50,150" />
+</svg>
+<div class = "section3" id = "shatter-section">
+    <button class="evaluate-btn">透過條件選出與您最契合的毛孩</button>
+    <div class = "evaluate-container">
+        <div class="evaluate-modal">
+            <!-- 這一行本身是「碎片的容器」，真正的 6×8 或 4×4 格子 是用 JavaScript 動態塞進去的。 -->
+            <h2 class="evaluate-h2">領養評估系統</h2>
+            <form>
+                <div class = "form-group">
+                    <label>家庭環境是否有小孩？</label><br>
+                    <!-- 加上 name：兩個選項會變成「二選一」的互斥組。 -->
+                    <!-- 對於「二選一」或「多選一」的題目（像妳的「有無小孩」），name 就像是**「題號」**。為什麼要一樣？ 瀏覽器看到兩個 input 的 name 都叫 has_kid，它才知道：「喔！這兩個人在競爭同一個位置」，所以妳選了 A，B 就會自動彈開。 -->
+                    <input type="radio" name="has_kid" value="yes" id="kid_yes">
+                    <label for="kid_yes">有小孩</label>
+                    <input type="radio" name="has_kid" value="no" id="kid_no" checked>
+                    <label for="kid_no">沒有小孩</label>
+                    <!-- id：是 input 的身分證字號，全網頁唯一。for：是 label 在喊：「我是在幫哪一個 ID 服務！」 -->
+                </div>
+                <div class = "form-group">
+                    <label>希望領養狗還是貓?</label><br>
+                    <input type="radio" name="dog_cat" value="dog" id="q2_dog" checked>
+                    <label for="q2_dog">狗</label>
+                    <input type="radio" name="dog_cat" value="cat" id="cat">
+                    <label for="cat">貓</label>
+                    <!-- id：是 input 的身分證字號，全網頁唯一。for：是 label 在喊：「我是在幫哪一個 ID 服務！」 -->
+                </div>
+                <div class="form-group">
+                    <label>理想的寵物活潑度 (0 - 100) : <span id = "lively-value">50</span>%</label><br>
+                    <input type="range" min="0" max="100" value="50" id = "number_s">
+                </div>
+                <div class = "form-group">
+                    <!-- 能量宣洩：一隻像「邊境牧羊犬」或「哈士奇」這種精力旺盛的狗，如果關在 5 坪的小套房，牠可能會拆家，這對飼主是折磨，對狗狗也不公平。
+
+    鄰里噪音：公寓最怕愛叫的毛孩。如果系統偵測到使用者住公寓，可能就會推薦比較安靜、性格穩定的毛孩（像是老貓或沉穩的大型犬）。
+
+    安全考量：有院子的人，系統可能會提醒圍欄的重要性。 -->
+                    <label>居住空間類型</label><br>
+                    <select>
+                        <option>公寓 / 套房</option>
+                        <option>獨棟透天 / 有院子</option>
+                    </select>
+                </div>
+
+                <button type="submit" class = "submit">開始計算契合度</button>
+                <p id="closeText" style="text-align: center; font-size: 0.8rem; margin-top: 20px; cursor: pointer; opacity: 0.5;">[ 點擊此處取消回上一頁 ]</p>
+            </form>
+        </div>
+    </div>
+    <div class = "fragment-container" id="fragment-container"></div>
+    <div class = "story">
+        <div class = "scan-line"></div>
+        <div class = "pet">
+            <h2 class = "pet-name">跳跳糖</h2>
+            <p class = "pet-story">他在一個暴雨後的廢棄畫室旁被發現。當時他毛髮沾滿了乾掉的顏料與汙泥，蜷縮在角落，像被遺棄的殘破畫布。
+
+初到中心時，他總是低著頭，拒絕任何眼神接觸，彷彿只要不看世界，心就不會再碎。
+
+經過半年的修復，跳跳糖終於開始重新信任人。他需要一個永遠不會再轉身離去的背影。</p>
+        </div>
+        <div class="stats-container">
+            <div class="stat-item">
+                <span>活潑度</span>
+                <div class="bar-outer"><div id="bar-lively" class="bar-inner"></div></div>
+            </div>
+            <div class="stat-item">
+                <span>親人度</span>
+                <div class="bar-outer"><div id="bar-friendly" class="bar-inner"></div></div>
+            </div>
+            <div class="stat-item">
+                <span>穩定度</span>
+                <div class="bar-outer"><div id="bar-calm" class="bar-inner"></div></div>
+            </div>
+        </div>
+        <div class="circle">
+            <svg viewBox="0 0 100 100">
+                <circle class="circle-inside" cx="50" cy="50" r="35" pathLength="220" ></circle>
+            </svg>
+            <div class="circle-text">
+                <span id="circle-number">0</span>%<br>
+                <label>適應性</label>
+            </div>
+        </div>
+    </div>
+    <div class="nav-btn-out">
+        <button class="nav-btn" onclick="changePet('prev')">PREV</button>
+        <button class="nav-btn" onclick="changePet('next')">NEXT</button>
+    </div>
+
+
+</div>
+
+
+<footer class = "section4">
+    <div class ="data-stream" style="animation-delay: 0s; left: 49.5%;"></div>
+    <div class ="data-stream" style="animation-delay: 1s; left: 53.5%;"></div>
+
+    <div class = "stars"></div>
+
+    <div class = logo>寵物中途之家</div>
+
+    <div class = "info-footer">
+        <div class = "info-box">
+            <h4>頁面</h4>
+            <p><a href="#">首頁</a></p>
+            <p><a href="#">寵物友善空間</a></p>
+            <p><a href="#">中途之家</a></p>
+            <p><a href="#">預約互動</a></p>
+            <p><a href="#">會員中心</a></p>
+        </div>
+        <div class = "info-box">
+            <h4>聯絡我們</h4>
+            <p><a href="mailto:animalsHome@gmail.com">animalsHome@gmail.com</a></p>
+            <p><a href="tel:0912345678">0912-345-678</a></p>
+        </div>
+        <div class = "info-box">
+            <h4>社群</h4>
+            <p><a href="#">IG: animals_home_</a></p>
+            <p><a href="#">FB: 寵物中途之家</a></p>
+            <p><a href="#">TWITTER: animals_home_</a></p>
+        </div>
+    </div>
+
+    <div class = "ethos"> 診治｜守護｜傳遞｜追蹤 </div>
+    <div class = "copyright">Copyright © animals's home website. All Rights Reserved.</div>
+</footer>
+</body>
+<script>
+
+</script>
+<script src="js/homepage.js"></script>
+</html>
