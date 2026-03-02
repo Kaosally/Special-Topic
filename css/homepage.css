@@ -1,0 +1,1142 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600&display=swap');
+/* 把 Google Fonts 上的「Noto Serif TC」這個字型引進你的網頁裡用。 */
+
+body{
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: #F2EFE6;
+  background-size: 20px 20px;
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(145, 63, 63, 0.02) 8px, transparent 7px), repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(0, 0, 0, 0.02) 6px, transparent 7px); 
+  overflow-x: hidden;
+}
+
+.navbar{
+  background-color: #4F7F6C;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px 20px;
+  font-size: 15px;
+  font-weight: bold;
+  position: relative;
+  z-index: 1;
+}
+
+.nav-links{
+  display: flex; /* gap 屬性在 Flexbox 或 Grid 佈局下才會生效 */
+  list-style: none;
+  margin: 0;
+  gap: 20px;
+}
+
+.nav-links li{
+  position: relative;
+}
+
+.nav-links a{
+  text-decoration: none;
+  color: #fff;
+  line-height: 2;
+  display: block; /* 讓整個區塊都可以點擊 */
+  text-align: center;
+  position: relative;
+  margin-right: 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+
+    font-family: 'Noto Serif TC', serif !important;
+    letter-spacing: 3px; /* 拉大字距是高級感的公式 */
+    font-size: 14px;     /* 字稍微縮小一點，反而更有氣質 */
+}
+
+.has-submenu{
+  display: none;
+  position: absolute;
+  top: 40px;
+  left: 0;
+  flex-direction: column;
+  background-color: #81B39A;
+  border-radius: 5px;
+  padding: 5px 0;
+}
+
+.has-submenu li {
+  list-style: none;
+}
+
+.has-submenu li a{
+  padding: 5px 15px;
+  display: block;
+  text-align: center;
+}
+
+.hamburger{
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.hamburger span{
+  width: 25px;
+  height: 3px;
+  background-color: #fff;
+  margin: 4px 0;
+}
+
+@media (max-width: 981px){
+  .hamburger{
+    display: flex;
+  }
+
+  .nav-links{
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background-color: #4F7F6C;
+    width: 200px;
+    border-radius: 8px;
+    padding: 10px 0;
+    text-align: center;
+  }
+
+  .nav-links.active{
+    display: flex;
+  }
+
+  .nav-links a{
+    display: inline-block; /* 因為漢堡模式下，<a> 變成 display: block，而 block 會自動撐滿父層寬度。 */
+  }
+  
+  .nav-links li a{
+    display: inline-block;
+    position: relative;
+}
+
+  .has-submenu{
+    display: none; 
+    position: static; /* 回到正常文檔流 */
+    flex-direction: column;
+    background-color: #3F6F5E;
+    border-radius: 5px;
+    margin: 5px 10px;
+    padding: 5px 0;
+  }
+
+  .nav-links li:hover .has-submenu{
+    display: flex;
+  }
+
+  .nav-links li a,
+  .has-submenu li a{
+    text-align: center;
+  }
+}
+
+.nav-links a::after{
+    content: "";
+    width: 0;
+    height: 2px;
+    background: #c5f1c0;
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after{
+    width: 100%;
+}
+
+.welcome-svg, .section1-svg{
+  background-color: #123535 ;
+}
+
+
+.float-slow, .float-medium {
+  /* 只是為了當我移過去時 浮動程度變大且 動態的改變 而不是一直改動畫的時間 所以才要使用這個變數 */
+  --intensity: 1; /* 預設幅度為 1 */
+  transform-origin: center bottom; /* 看起來就像：草是「從地面長出來」，上面在晃，底部固定 */
+  transform-box: fill-box; /* 如果沒寫，SVG 常常會用整個 viewBox，導致旋轉/位移怪怪的 */
+  transition: --intensity 0.6s ease; /* 當 --intensity 改變時，平滑過渡 0.6 秒 */
+}
+
+/* 使用 --intensity 當倍率，放大或縮小 X / Y 軸的位移幅度 */
+/* 使用 calc() 進行數值運算，讓基礎 px 數值可乘上 CSS 變數（--intensity）動態調整 */
+@keyframes breeze {
+  0% {
+    transform : translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(calc(12px * var(--intensity, 1)), calc(3px * var(--intensity, 1))) rotate(calc(0.5deg * var(--intensity)));
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+.float-slow {
+  animation: breeze 3s ease-in-out infinite;
+}
+
+.float-medium {
+  animation: breeze 7s ease-in-out infinite;
+  animation-delay: -2s; /* 動畫一開始就當作「已經跑了 2 秒」 */
+}
+
+#forefoot, #forefoot2, #hindfoot{
+  transform-origin: 0% 0%; /* 旋轉點在關節 */
+  transform-box: fill-box;
+  animation: dog-run 0.2s 30 ease-in-out alternate; /* alternate 第一次：0% → 100% ，下一次：100% → 0% 不會每次都「瞬間跳回起點」，會來回擺動（像鐘擺）。 */
+  /* animation-iteration-count: 30  = 動畫會跑 30 次（不是無限）。*/
+}
+
+/* 讓三隻腳的動畫「不同步」，製造出自然的跑狗步節奏。 */
+#forefoot{
+  animation-delay: 0s;
+}
+
+#forefoot2{
+  animation-delay: -0.1s; /* 動畫一開始就假裝已經播放了 0.1 秒 */
+  /* 半個週期 = 完全反相位（180°） */
+}
+
+#hindfoot{
+  animation-delay: -0.05s; /* 動畫一開始就假裝已經播放了 0.05 秒 */
+  /* -0.05s = 0.2s 的 1/4 週期 相位差約 90° */
+}
+
+/* 讓腳 以關節為支點來回旋轉 */
+@keyframes dog-run{
+  from{
+    transform: rotate(-15deg);
+  }
+  to{
+    transform: rotate(20deg);
+  }
+}
+
+.stamp-overlay {
+    position: absolute; /* 這個元素脫離文檔正常流 可以用 top / left / right / bottom 精準定位 */
+    top: 26%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* 把元素自己往左和往上各移 50%， 可以真正把元素中心對齊那個點 */
+    width: 25%;
+    z-index: 99; 
+    pointer-events: none; /* 這張「浮貼紙」只是裝飾，不會擋住按鈕或滑鼠操作 */
+}
+
+.container{
+  background-color: #123535;
+}
+
+.container > svg { /* 選取 .container 裡"直接"的子元素的 <svg> */
+    position: relative; /* 不會完全脫離原本的排版 ，「只調位置、不影響其他元素」*/
+    z-index: 5;
+    pointer-events: none;
+}
+
+.letter {
+    stroke: #051005;
+    stroke-linecap: round;
+    stroke-linejoin: round; /* 線條「轉角」是圓滑的，拐彎處不會尖尖的。 */
+    stroke-dasharray: 1500;
+    stroke-dashoffset: 1500;
+    opacity: 0;
+}
+
+.start-writing .letter {
+    opacity: 1;
+    animation: write 3s cubic-bezier(0.45, 0, 0.55, 1) forwards;
+    /* 這是一條自訂的三次貝茲曲線，用來定義 動畫時間（0 → 1）與動畫進度（0 → 1）之間的對應關係。在這條曲線中，動畫進度會從 0 緩慢開始，並在時間約 45%～55% 的區間內，從接近 0 快速變化到接近 1，最後在 1 附近放慢結束，因此看起來像真實的下筆與收筆。 */
+    animation-delay: 0.5s;
+}
+
+.start-writing .drip {
+    animation: drip 2s ease-in forwards; /* ease-in = 慢 → 快*/
+    animation-delay: 1.5s;
+}
+
+@keyframes write {
+    to {
+      stroke-dashoffset: 0; 
+    }
+}
+
+@keyframes drip {
+    0% {
+       height: 0; opacity: 0;
+    }
+    20% {
+       height: 40px; opacity: 1;
+    }
+    100% {
+       height: 110px; opacity: 0.4; 
+    }
+}
+
+#dog {
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.5)); /* 依照元素「實際形狀」產生陰影 */
+}
+
+#weeds use {
+  transform-origin: bottom center; /* 告訴瀏覽器：動畫的旋轉中心在哪 */
+  transform-box: fill-box; /* 用「這個元素本身的 bounding box」來算座標 */
+}
+
+#weeds use[href="#single-weed"] {
+  animation: breeze-high 5.5s infinite ease-in-out; /* 高草擺得慢，看起來比較有重量 */
+}
+
+#weeds use[href="#single-weed-mid"] {
+  animation: breeze-mid 4.5s infinite ease-in-out; /* 更快，擺動頻率比較高 */
+}
+
+#weeds use[href="#single-weed-short"] {
+  animation: breeze-low 5s infinite ease-in-out; /* 不最慢也不最快，短草比較硬，擺動幅度小 */
+}
+
+/* 用規律但錯位的負 delay，
+讓每棵草「像已經被風吹一段時間了」 */
+#weeds use:nth-child(odd) {
+  animation-delay: -1.7s;
+}
+
+/* 每第 3 棵草 */
+#weeds use:nth-child(3n) {
+  animation-delay: -3.2s; /* 同一棵草 可能同時符合兩個條件。下面那條 CSS 覆蓋上面那條（後寫的優先） */
+}
+
+@keyframes breeze-high {
+  0%, 100%{
+    rotate: -1deg;
+  }
+  50%{
+    rotate: 3deg;
+  }
+}
+
+/* 草比較短
+📌 彎曲阻力比較大
+📌 所以擺得比較小 */
+@keyframes breeze-mid {
+  0%, 100%{
+    rotate: -0.5deg;
+  }
+  50%{
+    rotate: 1.5deg;
+  }
+}
+
+@keyframes breeze-low {
+  0%, 100%{
+    rotate: -0.5deg;
+  }
+  50%{
+    rotate: 1.2deg;
+  }
+}
+
+#weeds-green use[href="#single-weed-green"]{
+  transform-origin: bottom center;
+  transform-box: fill-box;
+  animation:breeze-green 2s infinite ease-in-out;
+}
+
+#weeds-green use:nth-child(odd){
+  animation-delay: -1.8s;
+}
+
+#weeds-green use:nth-child(3n){
+  animation-delay: -5s;
+}
+
+@keyframes breeze-green {
+    0%, 100% {
+        transform: rotate(1deg);
+    }
+    50% {
+        transform: rotate(-0.6deg);
+    }
+}
+
+#dog-breathing{
+  transform-origin: 100px 240px; /* 設定變形的基準點 */
+  /* 這是腳底中心。小狗呼吸時，腳底板貼死地面，只有身體和頭部向上、向左右微微隆起。這才符合生物呼吸的物理邏輯。 */
+  animation: breathing 4s infinite ease-in-out;
+}
+
+@keyframes breathing{
+  0%, 100%{
+    transform: scale(1);
+  }
+  50%{
+    transform: scale(1.02);
+  }
+}
+
+#tailLine{
+  transform-origin: 32px -56px; /* 設定「旋轉的支點（中心點）」 */
+  animation: tailSway 3s infinite ease-in-out;
+}
+
+@keyframes tailSway{
+  0%,100%{
+    transform: rotate(0deg);
+  }
+  50%{
+    transform: rotate(8deg);
+  }
+}
+
+.water-reflections path{
+  stroke-dasharray: 100; /* 讓光影看起來更「碎」、更像真實的水面。 */
+  /* 水面不是平的，當光照在水波上時，妳只會看到波峰（高處）的反光。
+
+    不加時：線條是連貫的長條，看起來像在水底拉了幾根「白繩子」。
+
+    加了後：線條會斷開，視覺上就像是光線被一波波的浪頭截斷了，這就是我們常說的「波光粼粼」。 */
+  animation: waterShine 5.5s infinite ease-in-out;
+}
+
+.water-reflections path:nth-child(2){
+  animation-delay: -1s;
+}
+
+.water-reflections path:nth-child(3){
+  animation-delay: -2s;
+}
+
+.water-reflections path:nth-child(4){
+  animation-delay: -3s;
+}
+
+@keyframes waterShine{
+  0%, 100%{
+    transform: translateX(0) scaleX(1);
+    opacity: 0.3;
+  }
+  50%{
+    transform: translateX(15px) scaleX(1.1); /* 反光線條「往右滑一點點」，水紋橫向被拉長，像水在流。 */
+    opacity: 0.7;
+  }
+}
+
+.section2{
+  /* 從頂部到「距離底部 50px 的位置」都會是黑色（完全顯示） */
+    mask-image: linear-gradient(to bottom,  black calc(100% - 50px), transparent 100%);
+}
+
+.section2 svg{
+  position: relative; /* 沒有這行，下面的 z-index 會不生效 */
+  z-index: 1;
+}
+
+.section2::before{
+  content: "";
+  position: absolute; /* 對齊父層 */
+  left: 0;
+  width: 100%;
+  height: 150px;
+  /* 由上 → 下 ， 上面深色，下面變透明 */
+  background: linear-gradient(to bottom, #1a2e26 0%, rgba(26, 46, 38, 0.5) 40%, rgba(244, 241, 234, 0) 100%);
+  z-index: 5;
+}
+
+.section2 svg path{
+  stroke-dasharray: 3000;
+  stroke-dashoffset: 3000;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke-dashoffset 2.2s cubic-bezier(0.4, 0, 0.2, 1);;
+  /*  cubic-bezier(x1, y1, x2, y2) 第一個點 (0.4, 0)動畫一開始幾乎不動→ 很溫柔的起步，第二個點 (0.2, 1) 動畫很早就接近完成 → 中段流得很順、很快 */
+}
+
+.section2.is-visible svg path{
+  stroke-dashoffset: 0;
+}
+
+/* 而是載入 Google Fonts 提供的字型設定 CSS。 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&display=swap');
+
+.about-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    gap: 80px;
+    position: relative;
+    z-index: 999;
+}
+
+.visual-area{
+    position: relative;
+    width: 450px;
+    height: 450px;
+}
+
+canvas{
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    z-index: 5;
+    pointer-events: none;
+}
+
+#svg-layer{
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: all 0.5s cubic-bezier(0.19 1, 0.22 1);
+}
+
+/* 隱藏數據庫路徑，不影響佈局 */
+#path-library{
+    display: none;
+}
+
+.illustrate-text{
+    max-width: 400px;
+}
+
+h1{
+    font-size: 35px;
+    color: #2a5a5a;
+    letter-spacing: 8px;
+    transition: opacity 0.4s;
+}
+
+#desc{
+    font-size: 18px;
+    line-height: 2.2;
+    border-left: 3px solid #83c5be;
+    padding-left: 25px;
+    min-width: 100px;
+    color: #555;
+    transition: opacity 0.4s;
+}
+
+.btn-group{
+    display: flex;
+    gap: 15px;
+    margin-top: 40px;
+}
+
+#prevBtn, #nextBtn{
+    padding: 12px 35px;
+    border-radius: 50px;
+    border: 0;
+    background-color: #2a5a5a;
+    color: white;
+    letter-spacing: 2;
+    cursor: pointer;
+    font-family: 'Noto Serif TC';
+    font-weight: bold;
+}
+
+#prevBtn:hover:not(:disabled), #nextBtn:hover:not(:disabled){ /* 滑鼠移上去，而且這顆按鈕不是 disabled，才改背景色 */
+    background: #83c5be; 
+}
+
+#prevBtn:disabled,  #nextBtn:disabled{
+    opacity: 0.3; /* 明確表明這個不能點 */
+    cursor: not-allowed;
+}
+
+.is-morphing #svg-layer{
+    opacity: 0;
+}
+
+.is-morphing canvas{
+    opacity: 1;
+}
+
+.is-morphing h1, .is-morphing p{
+    opacity: 0;
+}
+
+.is-completed #svg-layer{
+    opacity: 1;
+}
+
+.is-completed h1, .is-completed p{
+    opacity: 1;
+}
+
+.section3 {
+    position: relative;
+    padding: 120px;
+    background: linear-gradient(to bottom, #F2EFE6 0%, #9c9a97 20%, #1A2020 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; 
+    width: 100%;
+}
+
+.section3::before{
+  content: "";
+  position: absolute;
+  background-image: linear-gradient(rgba(0, 242, 254, 0.05) 1.5px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 254, 0.05) 1.5px, transparent 1px);
+  background-size: 50px 50px; /* 設定背景圖案的重複單位大小（寬 50px、高 50px） */
+  width: 200%;
+  height: 200%;
+  animation: BgRotate 100s linear infinite;
+  z-index: 1;
+  
+}
+
+@keyframes BgRotate {
+  from{
+    transform: rotate(0deg);
+  }
+  to{
+    transform: rotate(360deg);
+  }
+}
+        
+.story {
+    position: relative;
+    padding: 40px 60px;
+    width: 750px;
+    border: 3px solid rgba(0, 242, 254, 0.3);
+    backdrop-filter: blur(15px); /* 不是模糊自己，而是：
+👉 模糊它後面的內容 */
+    opacity: 0;
+    background: rgba(0, 242, 254, 0.05);
+    transform: translateX(-120px);
+}
+
+.section3.active .story {
+    animation: Opening 1.2s cubic-bezier(0.87, 0, 0.13, 1) forwards;
+    /*數值大(0.87)，代表動畫會憋著「遲遲不啟動」。設為 0，代表起始速度極慢，像重型機械開動。 數值小(0.13)，代表動畫會提早進入結束前的緩衝。 設為 1，代表精準到達目標位置，不回彈也不過頭。 */
+}
+
+/* clip-path: polygon() 裡面的數字其實是：x y */
+@keyframes Opening {
+    0% { 
+        clip-path: polygon(0 49.5%, 100% 49.5%, 100% 50.5%, 0 50.5%); 
+        transform: scaleX(0) translateX(-120px); /* 橫線從中間點開始 */
+        opacity: 1; 
+        filter: brightness(10) blur(5px); /* 模糊會把邊緣往外擴散。 */
+    }
+    30% { 
+        clip-path: polygon(0 49.5%, 100% 49.5%, 100% 50.5%, 0 50.5%); 
+        transform: scaleX(1) translateX(-120px); /* 橫線拉全滿 */
+        filter: brightness(5) blur(2px);
+    }
+    60% { 
+        transform: translateX(-120px);
+        /* 開始往上下撕開 */
+        clip-path: polygon(0 30%, 100% 30%, 100% 70%, 0 70%); 
+        filter: brightness(2) blur(0);
+    }
+    100% { 
+        transform: translateX(-120px);
+        clip-path: polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%); 
+        opacity: 1;
+    }
+} 
+
+
+.pet-name {
+    color: #fff;
+    font-size: 35px;
+    letter-spacing: 10px;
+    margin-bottom: 30px;
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+}
+
+.pet-story {
+    color: #dadee3;
+    line-height: 2;
+    font-size: 0.8rem;
+    max-width: 70%; /* 留空間給圓環 */
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+
+.stat-item{
+  font-family: monospace;
+  letter-spacing: 15px;
+  color: #ffffff;
+  margin-bottom: 15px;
+  padding-left: 30px;
+}
+
+.bar-outer {
+    width: 250px;
+    height: 6px;
+    background: rgba(170, 170, 170, 0.1);
+    border-radius: 10px;
+    margin-top: 5px;
+}
+
+.bar-inner {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    transition: width 3.5s ease-in-out; 
+}
+
+.circle {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    width: 200px;
+    height: 80px;
+    fill: none;
+    stroke-width: 8;
+}
+
+.circle svg {
+    transform: rotate(-90deg); /* 讓進度從正上方開始跑 */
+}
+
+.circle-inside {
+    stroke: #b5f0f3;
+    stroke-dasharray: 220;
+    stroke-dashoffset: 220;
+    stroke-linecap: round;
+}
+
+.circle-text {
+    position: absolute;
+    top: 120%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    color: #00f2fe;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: sans-serif;
+    text-align: center;
+}
+
+@keyframes drawCircle {
+    to {
+        /* 92% 的計算：283 * (1 - 0.92) = 22.6 */
+        /* 220 * (1 - 0.92) */
+        stroke-dashoffset: 17.6;
+    }
+}
+
+.fragment-container{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10; /* 讓碎片顯示在一般內容上方 */
+}
+
+.fragment{
+  position: absolute; /* 每個碎片可以自由放在容器內任意位置。 */
+  background: #F2EFE6;
+  transition: transform 1.2s cubic-bezier(0.2,0.8,0.2,1), opacity 1s;
+  /* 第一控制點：時間 20% 時，進度已到 80% ，第二控制點：時間 20% 時，進度已接近 100% */
+}
+
+.scan-line{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #00f2fe;
+  box-shadow: 0 0 10px#00f2fe;
+  /* linear → 動畫速度曲線，表示速度均勻，不加速也不減速。 */
+  animation: scan 3s linear infinite;
+  opacity: 0.4;
+
+}
+
+@keyframes scan{
+  0%{
+    top: 0;
+  }
+  100%{
+    top: 100%;
+  }
+}
+
+.nav-btn-out {
+  position: absolute; 
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-270px);
+  display: flex;
+  gap: 80px;
+  z-index: 100; /* 沒加會導致按鈕無法被點擊，因為不是位於最上層 */
+}
+
+.nav-btn {
+  opacity: 0;
+  background: rgba(0, 242, 254, 0.1);
+  border: 1px solid rgba(0, 242, 254, 0.4);
+  padding: 15px 40px;
+  cursor: pointer;
+  transition: all 0.3s;
+  clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+  font-weight: bold;
+  color: #fff;
+  letter-spacing: 3px; /* 讓 PREV / NEXT 更帥一點 */
+  z-index: 100;
+}
+
+.nav-btn.active{
+  opacity: 1;
+}
+
+.nav-btn:hover {
+  background: rgba(0, 242, 254, 0.2); 
+  transform: scale(1.1); 
+}
+
+/* 確保翻轉動畫能壓過 Opening */
+.fold-next, .unfold-next, .fold-prev, .unfold-prev {
+    opacity: 1 !important; /* 確保翻轉時不會被 Opening 的 opacity 0 弄消失 */
+}
+
+@keyframes foldNext{
+  30%{
+    transform: translateX(-120px) scale(1.05) rotateY(-20deg) rotate(-10deg);
+    filter: brightness(2);
+  }
+  100%{
+    /* 旋轉 720 度
+👉 轉兩圈
+👉 增加戲劇性 */
+    /* 一邊瘋狂旋轉兩圈（720deg），一邊迅速縮小到消失 */
+    transform: translateX(-120px) scale(0) rotateY(-90deg) rotate(720deg);
+    filter: brightness(10);
+  }
+}
+
+/* 也就是因為當時摺疊的時候把內容蓋住了 這邊是在極小的情況下翻轉 直到100%時我就能看見真正的長方形內容的story了 */
+@keyframes unfoldNext{
+  0%{
+    transform: translateX(-120px) scale(0) rotateY(90deg) rotate(-720deg);
+    filter: brightness(10) blur(20px);
+  }
+  100%{
+    transform: translateX(-120px) scale(1) rotateY(0) rotate(0);
+  }
+}
+
+
+@keyframes foldPrev {
+  30%{
+    transform: translateX(-120px) scale(1.05) rotateY(20deg) rotate(10deg);
+    filter: brightness(2);
+  }
+  100%{
+    transform: translateX(-120px) scale(0) rotateY(90deg) rotate(-720deg);
+    filter: brightness(10) 
+  }
+}
+
+@keyframes unfoldPrev{
+  0%{
+    transform: translateX(-120px) scale(0) rotateY(-90deg) rotate(720deg);
+    filter: brightness(10) blur(20px);
+  }
+  100%{
+    transform: translateX(-120px) scale(1) rotateY(0) rotate(0);
+  }
+}
+
+/* 在 CSS 裡，!important 就像是**「拿著喇叭下死命令」 */
+/* 加上 !important 確保「只要這個 class 一出現，動畫就是老大」，誰都不能攔它。 */
+.fold-next {
+   animation: foldNext 0.7s forwards !important; 
+}
+.unfold-next {
+   animation: unfoldNext 0.8s forwards !important; 
+}
+.fold-prev {
+   animation: foldPrev 0.7s forwards !important; 
+}
+.unfold-prev {
+   animation: unfoldPrev 0.8s forwards !important; 
+}
+
+.section4{
+  position: relative;
+  text-align: center;
+  margin-top: 70px;
+  background: radial-gradient(circle at 50% 0px, rgba(0, 242, 254, 0.15) 0%, #050707 70%); /* 由上往下透光，像深海 */
+  padding: 40px;
+  width: 100%;
+  clip-path: polygon(0% 100%, 100% 100%, 100% 200px, 65% 200px, 48.5% 0%, 30% 200px, 0% 200px);
+  padding-top: 250px;
+}
+
+.data-stream{
+  position: absolute;
+  top: -150px;
+  left: 50%;
+  width: 3px;
+  height: 220px;
+  background: linear-gradient(to bottom, transparent,#fff, #387579, transparent);
+  box-shadow: 0 0 25px #00f2fe, 0 0 10px #fff;
+  animation: falling 2s linear infinite;
+  z-index: 3;
+}
+
+@keyframes falling {
+    0% {
+        transform: translate(-80%, -50px) scaleY(0.5);
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, 350px) scaleY(1.2);
+        opacity: 0;
+    }
+}
+
+.starts{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none; /*  因為位於最上層 若沒設定這個 會導致點不到底下的連結 */
+}
+
+.star {
+  position: absolute;
+  background: #00f2fe;
+  border-radius: 50%;
+  opacity: 0;
+  animation: starBlink 4s ease-in-out infinite;
+}
+
+@keyframes starBlink {
+    0%, 100% {
+       opacity: 0; 
+    }
+    50% {
+       opacity: 1; 
+       transform: scale(1.3); 
+    }
+}
+
+.logo{
+  font-size: 35px;
+  letter-spacing: 25px;
+  font-family: monospace;
+  color: #00f2fe;
+  font-weight: bold;
+  text-shadow: 0 0 20px rgba(0, 242, 254, 0.8);
+  margin-bottom: 60px;
+  transform: translateX(-25px);
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+.info-footer{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 建立 3 欄，每一欄都是 1fr */
+  border-top: 1px solid rgba(0, 242, 254, 0.2);
+  padding-top: 60px;
+  max-width: 900px;
+  margin: 0 auto;
+  transform: translate(-30px);
+}
+
+.info-footer h4{
+  font-size: 18px;
+  color: gray;
+  letter-spacing: 5px;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+.info-footer a {
+    text-decoration: none;
+    color: #e0e0e0;
+}
+
+.info-footer a:hover{
+  cursor: pointer;
+}
+
+.info-footer p{
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+.ethos{
+  display: inline-block; /* 元素會像 inline 一樣排在同一行，但同時又可以像 block 一樣設定 width / height */
+  margin-top: 70px;
+  font-size: 14px;
+  color: #b9b9b9;
+  letter-spacing: 5px;
+  border: 1px solid rgba(0, 242, 254, 0.4);
+  padding: 10px;
+  animation: blinking 2.5s infinite;
+  transform: translate(-30px);
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+@keyframes blinking {
+  0%, 100% {
+     opacity: 1; /* 完全不透明 */ 
+     box-shadow: 0 0 5px rgba(0,242,254,0.1); 
+     text-shadow: 0 0 5px #fff;
+     color: #fff;
+  }
+  50% {
+     opacity: 0.5; /* 半透明 */
+     box-shadow: 0 0 15px rgba(0,242,254,0.3); 
+  }
+}
+
+.copyright {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #b9b9b9;
+  letter-spacing: 5px;
+  transform: translate(-30px);
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+label{
+  font-size: 15px;
+}
+
+.evaluate-h2{
+  text-align: center;
+}
+
+.evaluate-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: translateX(-115px);
+  opacity: 0;
+  z-index: 999;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.evaluate-container.active{
+  opacity: 1;
+  pointer-events: auto; /*恢復元素的物理實體（讓滑鼠可以點到它）。 */
+}
+
+.evaluate-btn{
+  writing-mode: vertical-lr; /* 文字從上到下，從左到右排列 */
+  transform: translate(-146px, 7px);
+  letter-spacing: 5px;
+  padding: 8px;
+  background-color: rgba(255, 255, 255, 0.1);;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  position: relative;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.evaluate-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.evaluate-btn.active{
+  opacity: 1;
+}
+
+.evaluate-modal{
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px;
+  color: white;
+  width: 290px;
+  min-height: 250px; /* height 不要寫死，讓內容撐開，或者用 min-height */
+  backdrop-filter: blur(10px); /* 最後顯示時後面的內容要模糊 */
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+  position: relative;
+  z-index: 999;
+  padding: 15px;
+  transition: all 0.3 ease-in-out;
+}
+
+.form-group{
+  margin-top: 20px;
+}
+
+input[type = "radio"]{
+  margin-top: 10px;
+  display: none;
+}
+
+/* 這個 + 號在 CSS 裡叫做**「相鄰兄弟選擇器」 */
+input[type="radio"] + label {
+  display: inline-block;  /* 讓它變成像按鈕一樣可以設定長寬 */
+  margin-top: 10px;
+  padding: 10px 15px;
+  border-radius: 50px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-right: 10px;
+}
+
+input[type="radio"]:checked + label {
+  background-color: #f2efe6;
+  color: black;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+}
+
+input[type = "range"]{
+  margin-top: 10px;
+  width: 100%;
+}
+
+select{
+  width: 100%;
+  margin-top: 10px;
+  padding: 3px;
+  
+}
+
+.submit{
+  transform: translate(0px, 7px);
+  letter-spacing: 5px;
+  padding: 8px;
+  background-color: rgba(255, 255, 255, 0.1);;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.closeText{
+text-align: center;
+}
