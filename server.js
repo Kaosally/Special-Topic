@@ -6,10 +6,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 讓雲端讀取 css, js, html 檔案
+// 讓雲端能讀取到 css、js 和圖片資料夾
 app.use(express.static(path.join(__dirname)));
 
-// 設定首頁：當別人打開網址，直接給他看 homepage.html
+// 重要：這行解決 Cannot GET /，告訴伺服器首頁是 homepage.html
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'homepage.html'));
 });
@@ -38,7 +38,7 @@ const data = [
     { name: "阿寶", species: "狗", lively: 58, friendly: 93, calm: 85, num: 92, story: "大智若愚，總是給人一種憨厚踏實感覺。" }
 ];
 
-// 匹配 API
+// 匹配邏輯 API
 app.post('/api/match', (req, res) => {
     const { species, hasChild, energy, space = "" } = req.body; 
     let filteredData = data.filter(p => p.species === species);
@@ -60,8 +60,8 @@ app.post('/api/match', (req, res) => {
     res.json(matchResults[0] || data[0]);
 });
 
-// Render 必須使用動態 Port
+// 重要修正：Render 環境需要監聽 process.env.PORT
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`後端伺服器已啟動，埠號: ${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });
