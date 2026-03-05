@@ -11,7 +11,7 @@ app.use(express.static(path.join(__dirname)));
 
 // 重要：這行解決 Cannot GET /，告訴伺服器首頁是 homepage.html
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'homepage.html'));
+    res.sendFile(path.join(__dirname, 'test2.html'));
 });
 
 // 寵物資料
@@ -65,3 +65,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
