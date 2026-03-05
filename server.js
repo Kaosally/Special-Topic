@@ -3,18 +3,19 @@ const cors = require('cors');
 const path = require('path');
 const app = express();
 
+// 1. 基礎設定
 app.use(cors());
 app.use(express.json());
 
-// 讓雲端能讀取到 css、js 和圖片資料夾
+// 2. 開放靜態資源讀取 (確保你的 test2.html 請求 API 或抓取資源時路徑正確)
 app.use(express.static(path.join(__dirname)));
 
-// 重要：這行解決 Cannot GET /，告訴伺服器首頁是 homepage.html
+// 3. 根目錄路由：這就是你要的，打開網址只顯示純文字，確認喚醒
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'homepage.html'));
+    res.send('GET / (Server is awake!)');
 });
 
-// 寵物資料
+// 4. 完整的寵物資料庫 (20 筆資料，絕不省略)
 const data = [
     { name: "跳跳糖", species: "狗", lively: 45, friendly: 80, calm: 95, num: 92, story: "性格穩定，最喜歡陪在主人身邊看書。" },
     { name: "小米", species: "狗", lively: 60, friendly: 85, calm: 70, num: 78, story: "充滿好奇心，是全家人的開心果。" },
@@ -38,29 +39,52 @@ const data = [
     { name: "阿寶", species: "狗", lively: 58, friendly: 93, calm: 85, num: 92, story: "大智若愚，總是給人一種憨厚踏實感覺。" }
 ];
 
-// 匹配邏輯 API
+// 5. 匹配演算法 API
 app.post('/api/match', (req, res) => {
-    const { species, hasChild, energy, space = "" } = req.body; 
-    let filteredData = data.filter(p => p.species === species);
-    if (filteredData.length === 0) filteredData = data;
+    try {
+        const { species, hasChild, energy, space = "" } = req.body; 
 
-    let matchResults = filteredData.map(pet => {
-        let score = 0;
-        let livelyDiff = Math.abs(pet.lively - energy);
-        score += (100 - livelyDiff) * 0.4;
-        if (hasChild && (pet.friendly > 80 || pet.calm > 80)) score += 30;
-        else if (!hasChild) score += 30;
-        if (space.includes("透天") && pet.lively > 70) score += 30;
-        else if (space.includes("公寓") && pet.lively <= 60) score += 30;
-        else score += 15;
-        return { ...pet, finalScore: Math.round(score) };
-    });
+        // 篩選物種
+        let filteredData = data.filter(p => p.species === species);
+        if (filteredData.length === 0) filteredData = data;
 
-    matchResults.sort((a, b) => b.finalScore - a.finalScore);
-    res.json(matchResults[0] || data[0]);
+        let matchResults = filteredData.map(pet => {
+            let score = 0;
+            
+            // 活潑度權重 (40%)
+            let livelyDiff = Math.abs(pet.lively - energy);
+            score += (100 - livelyDiff) * 0.4;
+
+            // 友善度/小孩權重 (30%)
+            if (hasChild && (pet.friendly > 80 || pet.calm > 80)) {
+                score += 30;
+            } else if (!hasChild) {
+                score += 30; 
+            }
+
+            // 空間環境權重 (30%)
+            if (space.includes("透天") && pet.lively > 70) {
+                score += 30;
+            } else if (space.includes("公寓") && pet.lively <= 60) {
+                score += 30;
+            } else {
+                score += 15;
+            }
+
+            return { ...pet, finalScore: Math.round(score) };
+        });
+
+        // 排序取最高分者
+        matchResults.sort((a, b) => b.finalScore - a.finalScore);
+        res.json(matchResults[0] || data[0]);
+
+    } catch (error) {
+        console.error("API Error:", error);
+        res.status(500).json({ error: "伺服器內部錯誤" });
+    }
 });
 
-// 重要修正：Render 環境需要監聽 process.env.PORT
+// 6. 設定監聽埠號 (適配 Render 環境)
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server is running on port ${PORT}`);
